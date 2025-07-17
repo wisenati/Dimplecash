@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile & Debit Card | Dimple</title>
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        padding-bottom: 80px;
+      }
+
+      /* Header Styles */
+      .header {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 var(--radius) var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        animation: fadeInDown 0.6s ease-out;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: 0;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        animation: bounceIn 0.8s;
+        overflow: hidden;
+      }
+
+      .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .user-info {
+        flex: 1;
+      }
+
+      .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-status {
+        font-size: 12px;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      /* Profile Sections */
+      .profile-section {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        margin: 0 20px 25px;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.6s ease-out;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title i {
+        color: var(--primary);
+      }
+
+      /* Card Styles */
+      .card-container {
+        perspective: 1000px;
+        margin: 20px 0;
+      }
+
+      .card {
+        width: 100%;
+        height: 220px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: all 0.8s ease;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .card.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        color: white;
+      }
+
+      .card-front {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        z-index: 2;
+      }
+
+      .card-back {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        transform: rotateY(180deg);
+        z-index: 1;
+      }
+
+      .card-logo {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .card-logo img {
+        height: 40px;
+        filter: brightness(0) invert(1);
+      }
+
+      .card-number {
+        font-size: 18px;
+        letter-spacing: 2px;
+        text-align: center;
+        margin: 15px 0;
+        font-family: "Courier New", monospace;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-holder {
+        font-size: 14px;
+        text-transform: uppercase;
+      }
+
+      .card-expiry {
+        font-size: 14px;
+      }
+
+      .card-cvv {
+        background: white;
+        color: var(--text);
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 40px;
+        text-align: right;
+        font-family: "Courier New", monospace;
+      }
+
+      .card-magnetic {
+        height: 40px;
+        background: var(--text);
+        margin-top: 20px;
+      }
+
+      .card-signature {
+        height: 30px;
+        background: rgba(255, 255, 255, 0.2);
+        margin-top: 10px;
+        position: relative;
+        padding-right: 50px;
+      }
+
+      .card-signature::after {
+        content: "CVV";
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: white;
+      }
+
+      .card-detail-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .card-detail-action {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: var(--transition);
+      }
+
+      .card-detail-action:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .no-card {
+        text-align: center;
+        padding: 30px;
+        color: #666;
+      }
+
+      .no-card i {
+        font-size: 50px;
+        margin-bottom: 15px;
+        color: var(--primary-light);
+      }
+
+      /* Form Styles */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        transition: var(--transition);
+        background-color: #f9f9f9;
+      }
+
+      .form-control:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        background-color: white;
+      }
+
+      .form-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 1em;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .radio-option {
+        flex: 1;
+      }
+
+      .radio-input {
+        display: none;
+      }
+
+      .radio-label {
+        display: block;
+        padding: 15px;
+        background: #f9f9f9;
+        border: 2px solid #eee;
+        border-radius: var(--radius-sm);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .radio-input:checked + .radio-label {
+        border-color: var(--primary);
+        background: rgba(108, 92, 231, 0.1);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .radio-label i {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: var(--primary);
+      }
+
+      .file-upload {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .file-upload-btn {
+        width: 100%;
+        padding: 12px;
+        border: 2px dashed #ddd;
+        border-radius: var(--radius-sm);
+        background: #f9f9f9;
+        color: #666;
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .file-upload-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .file-upload-input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      .file-name {
+        margin-top: 5px;
+        font-size: 12px;
+        color: #666;
+        display: none;
+      }
+
+      /* Payment Info */
+      .payment-info {
+        background: rgba(0, 206, 201, 0.1);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--secondary);
+      }
+
+      .payment-info-title {
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--primary-dark);
+      }
+
+      .payment-info-detail {
+        margin-bottom: 5px;
+        font-size: 14px;
+      }
+
+      .payment-info-detail strong {
+        color: var(--primary-dark);
+      }
+
+      /* Button Styles */
+      .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--bg-gradient);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.7;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn:hover:not(:disabled)::after {
+        left: 100%;
+      }
+
+      /* History Log */
+      .history-log {
+        margin-top: 30px;
+      }
+
+      .history-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .history-item {
+        background: white;
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        margin-bottom: 10px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .history-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .history-status {
+        font-size: 12px;
+        padding: 4px 10px;
+        border-radius: 50px;
+        background: rgba(214, 48, 49, 0.1);
+        color: var(--error);
+      }
+
+      .history-status.approved {
+        background: rgba(0, 184, 148, 0.1);
+        color: var(--success);
+      }
+
+      .history-status.pending {
+        background: rgba(253, 203, 110, 0.1);
+        color: var(--warning);
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 20px;
+      }
+
+      .tab {
+        padding: 10px 15px;
+        cursor: pointer;
+        position: relative;
+        font-weight: 500;
+        color: #666;
+      }
+
+      .tab.active {
+        color: var(--primary);
+      }
+
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 3px 3px 0 0;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* Toast Notification */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.error {
+        background: var(--error);
+      }
+
+      .toast.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: var(--primary);
+      }
+
+      .nav-item:hover {
+        transform: translateY(-3px);
+        color: var(--primary);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes flip {
+        0% {
+          transform: rotateY(0deg);
+        }
+        100% {
+          transform: rotateY(180deg);
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (min-width: 768px) {
+        body {
+          max-width: 500px;
+          margin: 0 auto;
+          border-left: 1px solid #eee;
+          border-right: 1px solid #eee;
+        }
+
+        .header {
+          border-radius: 0 0 var(--radius) var(--radius);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .profile-section {
+          margin-left: 15px;
+          margin-right: 15px;
+        }
+
+        .card {
+          height: 200px;
+        }
+
+        .card-number {
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .user-avatar {
+          width: 50px;
+          height: 50px;
+          font-size: 20px;
+        }
+
+        .user-name {
+          font-size: 16px;
+        }
+
+        .card {
+          height: 180px;
+          padding: 15px;
+        }
+
+        .card-number {
+          font-size: 14px;
+          margin: 10px 0;
+        }
+
+        .card-holder,
+        .card-expiry {
+          font-size: 12px;
+        }
+
+        .btn {
+          padding: 14px;
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header with User Info -->
+    <header class="header">
+      <div class="header-content">
+        <div class="user-avatar" id="userAvatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <h1 class="user-name" id="userFullName">Loading...</h1>
+          <div class="user-status">
+            <span class="status-dot"></span>
+            <span id="userStatus">Active</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Profile Content -->
+    <div class="profile-section animate__animated animate__fadeIn">
+      <div class="tabs">
+        <div class="tab active" data-tab="card">My Card</div>
+        <div class="tab" data-tab="order">Order New Card</div>
+      </div>
+
+      <!-- Card Tab Content -->
+      <div class="tab-content active" id="cardTab">
+        <div class="section-title">
+          <i class="fas fa-credit-card"></i>
+          <span>Your Dimple Debit Card</span>
+        </div>
+
+        <div id="cardDisplay">
+          <div class="no-card" id="noCardMessage">
+            <i class="fas fa-credit-card"></i>
+            <h3>No Active Card</h3>
+            <p>You don't have an active Dimple debit card yet.</p>
+            <button class="btn" id="orderCardBtn">Order Now</button>
+          </div>
+
+          <div id="cardDetails" style="display: none">
+            <div class="card-container">
+              <div class="card" id="card">
+                <div class="card-face card-front">
+                  <div class="card-logo">
+                    <img
+                      src="https://dimple.com/logo.png"
+                      alt="Dimple Logo"
+                      onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 50\'%3E%3Ctext x=\'50%\' y=\'50%\' font-family=\'Arial\' font-size=\'14\' text-anchor=\'middle\' fill=\'white\'%3EDIMPLE%3C/text%3E%3C/svg%3E'"
+                    />
+                  </div>
+                  <div class="card-number" id="cardNumber">
+                    •••• •••• •••• ••••
+                  </div>
+                  <div class="card-details">
+                    <div class="card-holder" id="cardHolder">CARD HOLDER</div>
+                    <div class="card-expiry" id="cardExpiry">••/••</div>
+                  </div>
+                  <div class="card-detail-actions">
+                    <button class="card-detail-action" id="toggleCardNumber">
+                      <i class="fas fa-eye"></i>
+                      <span>Show Number</span>
+                    </button>
+                    <button class="card-detail-action" id="copyCardNumber">
+                      <i class="fas fa-copy"></i>
+                      <span>Copy</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-face card-back">
+                  <div class="card-magnetic"></div>
+                  <div class="card-signature"></div>
+                  <div class="card-cvv" id="cardCvv">•••</div>
+                  <div class="card-detail-actions">
+                    <button class="card-detail-action" id="toggleCvv">
+                      <i class="fas fa-eye"></i>
+                      <span>Show CVV</span>
+                    </button>
+                    <button class="card-detail-action" id="copyCvv">
+                      <i class="fas fa-copy"></i>
+                      <span>Copy</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="btn" id="flipCardBtn">
+              <i class="fas fa-sync-alt"></i>
+              <span>Flip Card</span>
+            </button>
+            <div class="history-log">
+              <div class="history-title">
+                <i class="fas fa-history"></i>
+                <span>Card Status</span>
+              </div>
+              <div class="history-item">
+                <span>Card Issued</span>
+                <span class="history-status approved" id="cardStatus"
+                  >Approved</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Card Tab Content -->
+      <div class="tab-content" id="orderTab">
+        <div class="section-title">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Order Dimple Debit Card</span>
+        </div>
+
+        <form id="cardOrderForm">
+          <div class="form-group">
+            <label class="form-label">Card Type</label>
+            <div class="radio-group">
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  id="virtualCard"
+                  name="cardType"
+                  value="virtual"
+                  class="radio-input"
+                  checked
+                />
+                <label for="virtualCard" class="radio-label">
+                  <i class="fas fa-mobile-alt"></i>
+                  <div>Virtual Card</div>
+                  <small>NGN 11,000</small>
+                </label>
+              </div>
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  id="physicalCard"
+                  name="cardType"
+                  value="physical"
+                  class="radio-input"
+                />
+                <label for="physicalCard" class="radio-label">
+                  <i class="fas fa-credit-card"></i>
+                  <div>Physical Card</div>
+                  <small>NGN 11,000</small>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fullName" class="form-label"
+              >Full Name (as on ID)</label
+            >
+            <input
+              type="text"
+              id="fullName"
+              class="form-control"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="dob" class="form-label">Date of Birth</label>
+            <input type="date" id="dob" class="form-control" required />
+          </div>
+
+          <div class="form-group">
+            <label for="nin" class="form-label"
+              >NIN (National Identification Number)</label
+            >
+            <input
+              type="text"
+              id="nin"
+              class="form-control"
+              placeholder="Enter your NIN"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="bvn" class="form-label"
+              >BVN (Bank Verification Number)</label
+            >
+            <input
+              type="text"
+              id="bvn"
+              class="form-control"
+              placeholder="Enter your BVN"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              class="form-control"
+              placeholder="Enter your phone number"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="state" class="form-label">State of Origin</label>
+            <select id="state" class="form-control form-select" required>
+              <option value="">Select State</option>
+              <option value="Abia">Abia</option>
+              <option value="Adamawa">Adamawa</option>
+              <option value="Akwa Ibom">Akwa Ibom</option>
+              <option value="Anambra">Anambra</option>
+              <option value="Bauchi">Bauchi</option>
+              <option value="Bayelsa">Bayelsa</option>
+              <option value="Benue">Benue</option>
+              <option value="Borno">Borno</option>
+              <option value="Cross River">Cross River</option>
+              <option value="Delta">Delta</option>
+              <option value="Ebonyi">Ebonyi</option>
+              <option value="Edo">Edo</option>
+              <option value="Ekiti">Ekiti</option>
+              <option value="Enugu">Enugu</option>
+              <option value="FCT">Federal Capital Territory</option>
+              <option value="Gombe">Gombe</option>
+              <option value="Imo">Imo</option>
+              <option value="Jigawa">Jigawa</option>
+              <option value="Kaduna">Kaduna</option>
+              <option value="Kano">Kano</option>
+              <option value="Katsina">Katsina</option>
+              <option value="Kebbi">Kebbi</option>
+              <option value="Kogi">Kogi</option>
+              <option value="Kwara">Kwara</option>
+              <option value="Lagos">Lagos</option>
+              <option value="Nasarawa">Nasarawa</option>
+              <option value="Niger">Niger</option>
+              <option value="Ogun">Ogun</option>
+              <option value="Ondo">Ondo</option>
+              <option value="Osun">Osun</option>
+              <option value="Oyo">Oyo</option>
+              <option value="Plateau">Plateau</option>
+              <option value="Rivers">Rivers</option>
+              <option value="Sokoto">Sokoto</option>
+              <option value="Taraba">Taraba</option>
+              <option value="Yobe">Yobe</option>
+              <option value="Zamfara">Zamfara</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="address" class="form-label"
+              >Delivery Address (for physical card)</label
+            >
+            <textarea
+              id="address"
+              class="form-control"
+              rows="3"
+              placeholder="Enter your full address"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Profile Image (Optional)</label>
+            <div class="file-upload">
+              <button type="button" class="file-upload-btn">
+                <i class="fas fa-cloud-upload-alt"></i> Upload Image
+              </button>
+              <input
+                type="file"
+                id="profileImage"
+                class="file-upload-input"
+                accept="image/*"
+              />
+              <div class="file-name" id="fileName">No file chosen</div>
+            </div>
+          </div>
+
+          <div class="payment-info">
+            <div class="payment-info-title">
+              <i class="fas fa-info-circle"></i> Payment Information
+            </div>
+            <div class="payment-info-detail">
+              <strong>Bank Name:</strong> Palmpay
+            </div>
+            <div class="payment-info-detail">
+              <strong>Account Number:</strong> 6658610146
+            </div>
+            <div class="payment-info-detail">
+              <strong>Account Name:</strong> Payment Point
+            </div>
+            <div class="payment-info-detail">
+              <strong>Amount:</strong> ₦11,000
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="senderName" class="form-label"
+              >Sender's Full Name</label
+            >
+            <input
+              type="text"
+              id="senderName"
+              class="form-control"
+              placeholder="As it appears on the bank transfer"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="senderAccount" class="form-label"
+              >Sender's Account Number</label
+            >
+            <input
+              type="text"
+              id="senderAccount"
+              class="form-control"
+              placeholder="Account number used for transfer"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn" id="submitOrderBtn">
+            <i class="fas fa-paper-plane"></i>
+            <span>Submit Order</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Order History -->
+    <div
+      class="profile-section animate__animated animate__fadeIn"
+      id="orderHistorySection"
+      style="display: none"
+    >
+      <div class="section-title">
+        <i class="fas fa-history"></i>
+        <span>Order History</span>
+      </div>
+      <div class="history-log" id="orderHistory">
+        <!-- History items will be added here dynamically -->
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage">Operation successful!</span>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="earn.html" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="https://t.me/memorymat" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>Group</span>
+      </a>
+      <a href="profile.html" class="nav-item active">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+      const storage = firebase.storage();
+
+      // DOM elements
+      const userFullName = document.getElementById("userFullName");
+      const userAvatar = document.getElementById("userAvatar");
+      const cardDisplay = document.getElementById("cardDisplay");
+      const noCardMessage = document.getElementById("noCardMessage");
+      const cardDetails = document.getElementById("cardDetails");
+      const cardNumber = document.getElementById("cardNumber");
+      const cardHolder = document.getElementById("cardHolder");
+      const cardExpiry = document.getElementById("cardExpiry");
+      const cardCvv = document.getElementById("cardCvv");
+      const cardStatus = document.getElementById("cardStatus");
+      const orderCardBtn = document.getElementById("orderCardBtn");
+      const flipCardBtn = document.getElementById("flipCardBtn");
+      const card = document.getElementById("card");
+      const cardOrderForm = document.getElementById("cardOrderForm");
+      const submitOrderBtn = document.getElementById("submitOrderBtn");
+      const profileImage = document.getElementById("profileImage");
+      const fileName = document.getElementById("fileName");
+      const orderHistorySection = document.getElementById(
+        "orderHistorySection"
+      );
+      const orderHistory = document.getElementById("orderHistory");
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+      const tabs = document.querySelectorAll(".tab");
+      const tabContents = document.querySelectorAll(".tab-content");
+      const toggleCardNumber = document.getElementById("toggleCardNumber");
+      const copyCardNumber = document.getElementById("copyCardNumber");
+      const toggleCvv = document.getElementById("toggleCvv");
+      const copyCvv = document.getElementById("copyCvv");
+
+      // Store the actual values
+      let actualCardNumber = "";
+      let actualCvv = "";
+      let cardNumberVisible = false;
+      let cvvVisible = false;
+
+      // Get user ID from session storage
+      const userId = sessionStorage.getItem("pendingUserId");
+
+      if (!userId) {
+        // Redirect to login if no user ID found
+        window.location.href = "login.html";
+      }
+
+      // Show toast notification
+      function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError ? "toast error show" : "toast show";
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Generate random card details
+      function generateCardDetails() {
+        const cardNum =
+          "4" +
+          Array.from({ length: 15 }, () => Math.floor(Math.random() * 10)).join(
+            ""
+          );
+        const formattedCardNum = cardNum.replace(/(\d{4})(?=\d)/g, "$1 ");
+
+        const month = String(Math.floor(Math.random() * 12) + 1).padStart(
+          2,
+          "0"
+        );
+        const year =
+          new Date().getFullYear() + Math.floor(Math.random() * 5) + 1;
+        const formattedExpiry = `${month}/${year.toString().slice(-2)}`;
+
+        const cvv = Array.from({ length: 3 }, () =>
+          Math.floor(Math.random() * 10)
+        ).join("");
+
+        return {
+          number: formattedCardNum,
+          expiry: formattedExpiry,
+          cvv: cvv,
+        };
+      }
+
+      // Flip card animation
+      flipCardBtn.addEventListener("click", () => {
+        card.classList.toggle("flipped");
+      });
+
+      // Tab switching
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          // Remove active class from all tabs and contents
+          tabs.forEach((t) => t.classList.remove("active"));
+          tabContents.forEach((c) => c.classList.remove("active"));
+
+          // Add active class to clicked tab and corresponding content
+          tab.classList.add("active");
+          const tabId = tab.getAttribute("data-tab") + "Tab";
+          document.getElementById(tabId).classList.add("active");
+        });
+      });
+
+      // Order card button
+      orderCardBtn.addEventListener("click", () => {
+        // Switch to order tab
+        tabs.forEach((t) => t.classList.remove("active"));
+        tabContents.forEach((c) => c.classList.remove("active"));
+
+        document
+          .querySelector('.tab[data-tab="order"]')
+          .classList.add("active");
+        document.getElementById("orderTab").classList.add("active");
+      });
+
+      // File upload display
+      profileImage.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          fileName.textContent = file.name;
+          fileName.style.display = "block";
+
+          // Preview image
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const img = document.createElement("img");
+            img.src = event.target.result;
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "cover";
+
+            // Clear previous content
+            while (userAvatar.firstChild) {
+              userAvatar.removeChild(userAvatar.firstChild);
+            }
+
+            userAvatar.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Form submission
+      cardOrderForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Show loading state
+        submitOrderBtn.disabled = true;
+        const originalText = submitOrderBtn.innerHTML;
+        submitOrderBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        try {
+          // Get form values
+          const cardType = document.querySelector(
+            'input[name="cardType"]:checked'
+          ).value;
+          const fullName = document.getElementById("fullName").value.trim();
+          const dob = document.getElementById("dob").value;
+          const nin = document.getElementById("nin").value.trim();
+          const bvn = document.getElementById("bvn").value.trim();
+          const phone = document.getElementById("phone").value.trim();
+          const state = document.getElementById("state").value;
+          const address = document.getElementById("address").value.trim();
+          const senderName = document.getElementById("senderName").value.trim();
+          const senderAccount = document
+            .getElementById("senderAccount")
+            .value.trim();
+
+          // Upload profile image if selected
+          let imageUrl = "";
+          const file = profileImage.files[0];
+          if (file) {
+            const storageRef = storage.ref(
+              `profile_images/${userId}/${file.name}`
+            );
+            const snapshot = await storageRef.put(file);
+            imageUrl = await snapshot.ref.getDownloadURL();
+          }
+
+          // Generate card details if virtual card
+          let cardDetails = null;
+          if (cardType === "virtual") {
+            cardDetails = generateCardDetails();
+          }
+
+          // Prepare order data
+          const orderData = {
+            userId: userId,
+            cardType: cardType,
+            fullName: fullName,
+            dob: dob,
+            nin: nin,
+            bvn: bvn,
+            phone: phone,
+            state: state,
+            address: address,
+            senderName: senderName,
+            senderAccount: senderAccount,
+            amount: 11000,
+            status: "pending",
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+            imageUrl: imageUrl || null,
+            cardDetails: cardDetails || null,
+          };
+
+          // Save to Firebase
+          const newOrderRef = database.ref("cardOrders").push();
+          await newOrderRef.set(orderData);
+
+          // Update user's card info if virtual
+          if (cardType === "virtual" && cardDetails) {
+            await database.ref(`users/${userId}/card`).set({
+              number: cardDetails.number.replace(/\s/g, ""),
+              expiry: cardDetails.expiry,
+              cvv: cardDetails.cvv,
+              type: "virtual",
+              status: "pending",
+              orderId: newOrderRef.key,
+            });
+          }
+
+          // Show success message
+          showToast(
+            "Order submitted successfully! Our team will review your payment."
+          );
+
+          // Reset form
+          cardOrderForm.reset();
+          fileName.style.display = "none";
+
+          // Fetch updated data
+          fetchUserData();
+
+          // Switch to card tab
+          tabs.forEach((t) => t.classList.remove("active"));
+          tabContents.forEach((c) => c.classList.remove("active"));
+
+          document
+            .querySelector('.tab[data-tab="card"]')
+            .classList.add("active");
+          document.getElementById("cardTab").classList.add("active");
+        } catch (error) {
+          console.error("Error submitting order:", error);
+          showToast("Error submitting order. Please try again.", true);
+        } finally {
+          // Reset button state
+          submitOrderBtn.disabled = false;
+          submitOrderBtn.innerHTML = originalText;
+        }
+      });
+
+      // Initialize card details with user's data
+      function initCardDetails() {
+        database
+          .ref(`users/${userId}/card`)
+          .once("value")
+          .then((snapshot) => {
+            const cardData = snapshot.val();
+            if (cardData) {
+              actualCardNumber = cardData.number;
+              actualCvv = cardData.cvv;
+
+              // Format card number with spaces
+              const formattedCardNumber = actualCardNumber.replace(
+                /(\d{4})(?=\d)/g,
+                "$1 "
+              );
+
+              // Set masked values by default
+              cardNumber.textContent =
+                "•••• •••• •••• " + actualCardNumber.slice(-4);
+              cardCvv.textContent = "•••";
+            }
+          });
+      }
+
+      // Toggle card number visibility
+      toggleCardNumber.addEventListener("click", () => {
+        cardNumberVisible = !cardNumberVisible;
+
+        if (cardNumberVisible) {
+          const formattedCardNumber = actualCardNumber.replace(
+            /(\d{4})(?=\d)/g,
+            "$1 "
+          );
+          cardNumber.textContent = formattedCardNumber;
+          toggleCardNumber.innerHTML =
+            '<i class="fas fa-eye-slash"></i><span>Hide Number</span>';
+        } else {
+          cardNumber.textContent =
+            "•••• •••• •••• " + actualCardNumber.slice(-4);
+          toggleCardNumber.innerHTML =
+            '<i class="fas fa-eye"></i><span>Show Number</span>';
+        }
+      });
+
+      // Copy card number
+      copyCardNumber.addEventListener("click", () => {
+        navigator.clipboard
+          .writeText(actualCardNumber)
+          .then(() => {
+            showToast("Card number copied to clipboard!");
+          })
+          .catch(() => {
+            showToast("Failed to copy card number", true);
+          });
+      });
+
+      // Toggle CVV visibility
+      toggleCvv.addEventListener("click", () => {
+        cvvVisible = !cvvVisible;
+
+        if (cvvVisible) {
+          cardCvv.textContent = actualCvv;
+          cardCvv.classList.add("show");
+          toggleCvv.innerHTML =
+            '<i class="fas fa-eye-slash"></i><span>Hide CVV</span>';
+        } else {
+          cardCvv.textContent = "•••";
+          cardCvv.classList.remove("show");
+          toggleCvv.innerHTML =
+            '<i class="fas fa-eye"></i><span>Show CVV</span>';
+        }
+      });
+
+      // Copy CVV
+      copyCvv.addEventListener("click", () => {
+        navigator.clipboard
+          .writeText(actualCvv)
+          .then(() => {
+            showToast("CVV copied to clipboard!");
+          })
+          .catch(() => {
+            showToast("Failed to copy CVV", true);
+          });
+      });
+
+      // Fetch user data from Firebase
+      function fetchUserData() {
+        database
+          .ref(`users/${userId}`)
+          .once("value")
+          .then((snapshot) => {
+            const userData = snapshot.val();
+
+            if (userData) {
+              // Update user info
+              userFullName.textContent = userData.fullName || "User";
+
+              // Update avatar if exists
+              if (userData.imageUrl) {
+                userAvatar.innerHTML = "";
+                const img = document.createElement("img");
+                img.src = userData.imageUrl;
+                img.alt = "Profile Image";
+                userAvatar.appendChild(img);
+              }
+
+              // Check for card
+              if (userData.card) {
+                noCardMessage.style.display = "none";
+                cardDetails.style.display = "block";
+
+                // Update card details
+                const maskedNumber = userData.card.number.replace(
+                  /(\d{4})(?=\d{4})/g,
+                  "•••• "
+                );
+                cardNumber.textContent = maskedNumber;
+                cardHolder.textContent = userData.fullName || "CARD HOLDER";
+                cardExpiry.textContent = userData.card.expiry || "••/••";
+                cardCvv.textContent = "•••"; // Don't show real CVV
+
+                // Update actual values for toggling
+                actualCardNumber = userData.card.number;
+                actualCvv = userData.card.cvv;
+
+                // Update card status
+                if (userData.card.status === "approved") {
+                  cardStatus.textContent = "Approved";
+                  cardStatus.className = "history-status approved";
+                } else {
+                  cardStatus.textContent = "Pending";
+                  cardStatus.className = "history-status pending";
+                }
+              } else {
+                noCardMessage.style.display = "block";
+                cardDetails.style.display = "none";
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+            showToast("Error loading user data", true);
+          });
+
+        // Fetch order history
+        fetchOrderHistory();
+      }
+
+      // Fetch order history
+      function fetchOrderHistory() {
+        database
+          .ref("cardOrders")
+          .orderByChild("userId")
+          .equalTo(userId)
+          .once("value")
+          .then((snapshot) => {
+            const orders = snapshot.val();
+
+            if (orders) {
+              orderHistorySection.style.display = "block";
+              orderHistory.innerHTML = "";
+
+              // Convert to array and sort by date
+              const ordersArray = Object.entries(orders).map(([id, data]) => ({
+                id,
+                ...data,
+              }));
+              ordersArray.sort((a, b) => b.createdAt - a.createdAt);
+
+              // Display orders
+              ordersArray.forEach((order) => {
+                const orderItem = document.createElement("div");
+                orderItem.className = "history-item";
+
+                const orderDate = new Date(
+                  order.createdAt
+                ).toLocaleDateString();
+                const orderType =
+                  order.cardType === "virtual"
+                    ? "Virtual Card"
+                    : "Physical Card";
+
+                let statusClass = "history-status";
+                if (order.status === "approved") statusClass += " approved";
+                else if (order.status === "pending") statusClass += " pending";
+                else statusClass += "";
+
+                orderItem.innerHTML = `
+                  <div>
+                    <strong>${orderType}</strong>
+                    <div>${orderDate} - ₦${order.amount.toLocaleString()}</div>
+                  </div>
+                  <span class="${statusClass}">${order.status}</span>
+                `;
+
+                orderHistory.appendChild(orderItem);
+              });
+            } else {
+              orderHistorySection.style.display = "none";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching order history:", error);
+          });
+      }
+
+      // Real-time updates for card status
+      function setupRealtimeUpdates() {
+        database.ref(`users/${userId}/card`).on("value", (snapshot) => {
+          const cardData = snapshot.val();
+
+          if (cardData) {
+            noCardMessage.style.display = "none";
+            cardDetails.style.display = "block";
+
+            // Update card details
+            const maskedNumber = cardData.number.replace(
+              /(\d{4})(?=\d{4})/g,
+              "•••• "
+            );
+            cardNumber.textContent = maskedNumber;
+
+            // Update actual values for toggling
+            actualCardNumber = cardData.number;
+            actualCvv = cardData.cvv;
+
+            // Update card status
+            if (cardData.status === "approved") {
+              cardStatus.textContent = "Approved";
+              cardStatus.className = "history-status approved";
+
+              // If virtual card, show full details (for demo purposes)
+              if (cardData.type === "virtual") {
+                cardExpiry.textContent = cardData.expiry;
+                // In a real app, you'd want to securely handle CVV display
+              }
+            } else {
+              cardStatus.textContent = "Pending";
+              cardStatus.className = "history-status pending";
+            }
+          } else {
+            noCardMessage.style.display = "block";
+            cardDetails.style.display = "none";
+          }
+        });
+
+        // Real-time updates for order history
+        database
+          .ref("cardOrders")
+          .orderByChild("userId")
+          .equalTo(userId)
+          .on("value", (snapshot) => {
+            fetchOrderHistory();
+          });
+      }
+
+      // Initialize
+      fetchUserData();
+      setupRealtimeUpdates();
+      initCardDetails();
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>

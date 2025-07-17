@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Dimple</title>
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Header Styles */
+      .header {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 var(--radius) var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        animation: fadeInDown 0.6s ease-out;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: 0;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-avatar {
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        animation: bounceIn 0.8s;
+      }
+
+      .user-info {
+        flex: 1;
+      }
+
+      .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-status {
+        font-size: 12px;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      /* Balance Card */
+      .balance-card {
+        background: white;
+        border-radius: var(--radius);
+        padding: 25px;
+        margin: 0 20px 25px;
+        box-shadow: var(--shadow);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+      }
+
+      .balance-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(108, 92, 231, 0.05) 0%,
+          rgba(108, 92, 231, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: -1;
+      }
+
+      .balance-title {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .balance-amount {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .balance-amount span {
+        font-size: 24px;
+      }
+
+      .balance-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chip {
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .chip-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .chip-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      /* Stats Section */
+      .stats-section {
+        padding: 0 20px;
+        margin-bottom: 25px;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title i {
+        color: var(--primary);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(108, 92, 231, 0.15);
+      }
+
+      .stat-title {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .stat-value.success {
+        color: var(--success);
+      }
+
+      .stat-value.warning {
+        color: var(--warning);
+      }
+
+      /* Verification Section */
+      .verification-section {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        margin: 0 20px 25px;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.6s ease-out 0.6s both;
+      }
+
+      .verification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .verification-title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .verification-status {
+        font-size: 12px;
+        padding: 4px 10px;
+        border-radius: 50px;
+        background: rgba(214, 48, 49, 0.1);
+        color: var(--error);
+      }
+
+      .verification-status.verified {
+        background: rgba(0, 184, 148, 0.1);
+        color: var(--success);
+      }
+
+      .verification-content {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      /* Referral Section */
+      .referral-section {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        margin: 0 20px 25px;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.6s ease-out 0.8s both;
+      }
+
+      .referral-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .referral-link {
+        background: var(--light);
+        border-radius: var(--radius-sm);
+        padding: 12px;
+        font-size: 14px;
+        word-break: break-all;
+        margin-bottom: 15px;
+        position: relative;
+      }
+
+      .referral-link::after {
+        content: "Copy";
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        opacity: 0;
+        transition: var(--transition);
+      }
+
+      .referral-link:hover::after {
+        opacity: 1;
+      }
+
+      .referral-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+
+      .referral-stat {
+        text-align: center;
+      }
+
+      .referral-stat-value {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .referral-stat-label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        padding: 0 20px;
+        margin-bottom: 25px;
+        animation: fadeInUp 0.6s ease-out 1s both;
+      }
+
+      .cta-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .cta-card {
+        background: white;
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+        transition: var(--transition);
+      }
+
+      .cta-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(108, 92, 231, 0.15);
+      }
+
+      .cta-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--light);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 10px;
+        color: var(--primary);
+        font-size: 20px;
+      }
+
+      .cta-title {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      /* Intro Tour */
+      .intro-tour {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        margin: 0 20px 25px;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.6s ease-out 1.2s both;
+      }
+
+      .intro-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .intro-content {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      .intro-features {
+        margin-top: 15px;
+      }
+
+      .intro-feature {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      .intro-feature i {
+        color: var(--primary);
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: var(--primary);
+      }
+
+      .nav-item:hover {
+        transform: translateY(-3px);
+        color: var(--primary);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (min-width: 768px) {
+        body {
+          max-width: 500px;
+          margin: 0 auto;
+          border-left: 1px solid #eee;
+          border-right: 1px solid #eee;
+        }
+
+        .header {
+          border-radius: 0 0 var(--radius) var(--radius);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .balance-card,
+        .verification-section,
+        .referral-section,
+        .intro-tour {
+          margin-left: 15px;
+          margin-right: 15px;
+        }
+
+        .balance-amount {
+          font-size: 28px;
+        }
+
+        .stats-grid,
+        .cta-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .user-avatar {
+          width: 50px;
+          height: 50px;
+          font-size: 20px;
+        }
+
+        .user-name {
+          font-size: 16px;
+        }
+
+        .balance-card {
+          padding: 20px;
+        }
+
+        .balance-amount {
+          font-size: 24px;
+        }
+
+        .chip {
+          padding: 6px 12px;
+          font-size: 13px;
+        }
+      }
+
+      /* Toast notification */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.error {
+        background: var(--error);
+      }
+
+      .toast.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      a {
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header with User Info -->
+    <header class="header">
+      <div class="header-content">
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="user-info">
+          <h1 class="user-name" id="userFullName">Loading...</h1>
+          <div class="user-status">
+            <span class="status-dot"></span>
+            <span id="userStatus">Active</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Balance Card -->
+    <div class="balance-card">
+      <div class="balance-title">
+        <i class="fas fa-wallet"></i>
+        <span>Available Balance</span>
+      </div>
+      <div class="balance-amount">
+        <span>₦</span>
+        <span id="userBalance">0.00</span>
+      </div>
+      <div class="balance-actions">
+        <div class="chip chip-primary" id="withdrawBtn">
+          <i class="fas fa-money-bill-wave"></i>
+          <span>Withdraw</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <h2 class="section-title">
+        <i class="fas fa-chart-line"></i>
+        <span>Today's Stats</span>
+      </h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Today's Earnings</div>
+          <div class="stat-value success" id="todaysEarnings">₦0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Total Earnings</div>
+          <div class="stat-value" id="totalEarnings">₦0.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verification Section -->
+    <div class="verification-section">
+      <div class="verification-header">
+        <h2 class="verification-title">Account Verification</h2>
+        <div class="verification-status" id="verificationStatus">
+          Not Verified
+        </div>
+      </div>
+      <div class="verification-content">
+        Verify your account to unlock all features and higher earning potential.
+      </div>
+      <div class="chip chip-primary" id="activatePlanBtn">
+        <i class="fas fa-rocket"></i>
+        <span>Activate Plan</span>
+      </div>
+    </div>
+
+    <!-- Referral Section -->
+    <div class="referral-section">
+      <h2 class="referral-title">Your Referral Link</h2>
+      <div class="referral-link" id="referralLink">
+        https://dimple.com/ref/username
+      </div>
+      <div class="referral-stats">
+        <div class="referral-stat">
+          <div class="referral-stat-value" id="referralCount">0</div>
+          <div class="referral-stat-label">Referrals</div>
+        </div>
+        <div class="referral-stat">
+          <div class="referral-stat-value" id="referralEarnings">₦0.00</div>
+          <div class="referral-stat-label">Earnings</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h2 class="section-title">
+        <i class="fas fa-bolt"></i>
+        <span>Quick Actions</span>
+      </h2>
+      <div class="cta-grid">
+        <a href="https://t.me/memorymat" class="cta-card">
+          <div class="cta-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="cta-title">Join Group</div>
+        </a>
+        <a href="earn.html" class="cta-card">
+          <div class="cta-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="cta-title">Earn More</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Intro Tour -->
+    <div class="intro-tour">
+      <h2 class="intro-title">
+        <i class="fas fa-info-circle"></i>
+        <span>Welcome to Dimple!</span>
+      </h2>
+      <div class="intro-content">
+        Dimple pays users per hour for chatting with foreign premium users and
+        training AI models. Upload music and get paid too!
+      </div>
+      <div class="intro-features">
+        <div class="intro-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Withdrawal date: 10th of every month</span>
+        </div>
+        <div class="intro-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Minimum withdrawal: ₦1,000</span>
+        </div>
+        <div class="intro-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Maximum withdrawal: ₦6,500,000</span>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item active">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="ai.html" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="https://t.me/memorymat" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>Group</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage">Copied to clipboard!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const userFullName = document.getElementById("userFullName");
+      const userBalance = document.getElementById("userBalance");
+      const todaysEarnings = document.getElementById("todaysEarnings");
+      const totalEarnings = document.getElementById("totalEarnings");
+      const verificationStatus = document.getElementById("verificationStatus");
+      const referralLink = document.getElementById("referralLink");
+      const referralCount = document.getElementById("referralCount");
+      const referralEarnings = document.getElementById("referralEarnings");
+      const withdrawBtn = document.getElementById("withdrawBtn");
+      const activatePlanBtn = document.getElementById("activatePlanBtn");
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+
+      // Get user ID from session storage
+      const userId = sessionStorage.getItem("pendingUserId");
+
+      if (!userId) {
+        // Redirect to login if no user ID found
+        window.location.href = "login.html";
+      }
+
+      // Format currency
+      function formatCurrency(amount) {
+        return parseFloat(amount)
+          .toFixed(2)
+          .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+      }
+
+      // Show toast notification
+      function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError ? "toast error show" : "toast show";
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Copy referral link to clipboard
+      referralLink.addEventListener("click", () => {
+        const text = referralLink.textContent.trim();
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("Referral link copied to clipboard!");
+        });
+      });
+
+      // Withdraw button handler
+      withdrawBtn.addEventListener("click", () => {
+        // Check if balance is sufficient
+        const balance = parseFloat(userBalance.textContent.replace(/,/g, ""));
+        if (balance < 1000) {
+          showToast("Minimum withdrawal is ₦1,000", true);
+          return;
+        }
+
+        // // Get current date
+        // const today = new Date();
+        // const currentDay = today.getDate();
+        // const withdrawalDay = 17; // 10th of the month
+
+        // if (currentDay !== withdrawalDay) {
+        //   showToast(
+        //     `Withdrawals are only processed on the ${withdrawalDay}th of each month`,
+        //     true
+        //   );
+        //   return;
+        // }
+
+        // Proceed to withdrawal
+        window.location.href = "withdraw.html";
+      });
+
+      // Activate plan button handler
+      activatePlanBtn.addEventListener("click", () => {
+        window.location.href = "activation.html";
+      });
+
+      // Fetch user data from Firebase
+      function fetchUserData() {
+        database
+          .ref("users/" + userId)
+          .once("value")
+          .then((snapshot) => {
+            const userData = snapshot.val();
+
+            if (userData) {
+              // Update UI with user data
+              userFullName.textContent = userData.fullName || "User";
+              userBalance.textContent = formatCurrency(userData.balance || 0);
+
+              // Calculate today's earnings (mock data - replace with actual calculation)
+              const todaysEarningsValue = Math.random() * 1000 + 100;
+              todaysEarnings.textContent = `₦${formatCurrency(
+                todaysEarningsValue
+              )}`;
+
+              // Calculate total earnings (mock data - replace with actual calculation)
+              const totalEarningsValue =
+                (userData.balance || 0) + todaysEarningsValue;
+              totalEarnings.textContent = `₦${formatCurrency(
+                totalEarningsValue
+              )}`;
+
+              // Update verification status
+              if (userData.verified) {
+                verificationStatus.textContent = "Verified";
+                verificationStatus.classList.add("verified");
+                activatePlanBtn.style.display = "none";
+              } else {
+                verificationStatus.textContent = "Not Verified";
+                verificationStatus.classList.remove("verified");
+                activatePlanBtn.style.display = "inline-flex";
+              }
+
+              // Update referral info
+              const referralCode = userData.username || "user";
+              referralLink.textContent = `${window.location.origin}/ref/${referralCode}`;
+              referralCount.textContent = userData.referralCount || 0;
+              referralEarnings.textContent = `₦${formatCurrency(
+                userData.referralEarnings || 0
+              )}`;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+            showToast("Error loading user data", true);
+          });
+      }
+
+      // Real-time updates for balance
+      function setupRealtimeUpdates() {
+        database.ref("users/" + userId).on("value", (snapshot) => {
+          const userData = snapshot.val();
+          if (userData && userData.balance) {
+            userBalance.textContent = formatCurrency(userData.balance);
+          }
+        });
+      }
+
+      // Initialize
+      fetchUserData();
+      setupRealtimeUpdates();
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>

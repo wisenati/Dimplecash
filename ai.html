@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dimple AI Training</title>
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --text: #f5f6fa;
+        --text-secondary: #b2bec3;
+        --dark: #2d3436;
+        --darker: #1e272e;
+        --darkest: #0f1519;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.2);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--darkest);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header Styles */
+      .header {
+        background: var(--darker);
+        color: white;
+        padding: 15px 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        animation: fadeInDown 0.6s ease-out;
+        z-index: 10;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .ai-logo {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+      }
+
+      .ai-title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .earnings-display {
+        background: rgba(108, 92, 231, 0.2);
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      /* Main Content */
+      .main-content {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        overflow-y: auto;
+        padding-bottom: 80px; /* Space for bottom nav */
+      }
+
+      /* Training Stats */
+      .stats-card {
+        background: var(--darker);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+      }
+
+      .stats-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .stats-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary-light);
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .stat-item {
+        background: var(--dark);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      /* Chat Container */
+      .chat-container {
+        background: var(--darker);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+      }
+
+      .chat-header {
+        background: var(--dark);
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .chat-title {
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-indicator {
+        width: 10px;
+        height: 10px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-height: 50vh;
+      }
+
+      .message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: var(--radius-sm);
+        position: relative;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .message-user {
+        align-self: flex-end;
+        background: var(--primary);
+        color: white;
+        border-bottom-right-radius: 0;
+      }
+
+      .message-ai {
+        align-self: flex-start;
+        background: var(--dark);
+        border-bottom-left-radius: 0;
+      }
+
+      .message-time {
+        font-size: 10px;
+        color: var(--text-secondary);
+        margin-top: 5px;
+        text-align: right;
+      }
+
+      .chat-input-container {
+        padding: 15px;
+        background: var(--dark);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex: 1;
+        background: var(--darker);
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 12px 15px;
+        color: var(--text);
+        font-family: "Poppins", sans-serif;
+        resize: none;
+        max-height: 120px;
+        min-height: 50px;
+        outline: none;
+      }
+
+      .chat-input::placeholder {
+        color: var(--text-secondary);
+      }
+
+      .send-btn {
+        width: 50px;
+        height: 50px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .send-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .send-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Training Tips */
+      .tips-card {
+        background: var(--darker);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        animation: fadeInUp 0.6s ease-out 0.6s both;
+      }
+
+      .tips-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .tips-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary-light);
+      }
+
+      .tips-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .tip-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--text-secondary);
+      }
+
+      .tip-item i {
+        color: var(--primary);
+        margin-top: 2px;
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--darker);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: var(--primary);
+      }
+
+      .nav-item:hover {
+        transform: translateY(-3px);
+        color: var(--primary);
+      }
+
+      /* Toast Notification */
+      .toast {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.error {
+        background: var(--error);
+      }
+
+      .toast.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .header {
+          padding: 12px 15px;
+        }
+
+        .ai-title {
+          font-size: 16px;
+        }
+
+        .earnings-display {
+          font-size: 12px;
+          padding: 5px 10px;
+        }
+
+        .main-content {
+          padding: 15px;
+        }
+
+        .stats-card,
+        .chat-container,
+        .tips-card {
+          border-radius: var(--radius-sm);
+        }
+
+        .stat-value {
+          font-size: 18px;
+        }
+
+        .message {
+          max-width: 90%;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .header {
+          padding: 10px 12px;
+        }
+
+        .ai-logo {
+          width: 32px;
+          height: 32px;
+        }
+
+        .ai-title {
+          font-size: 14px;
+        }
+
+        .earnings-display {
+          font-size: 11px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .chat-input-container {
+          padding: 10px;
+        }
+
+        .chat-input {
+          padding: 10px;
+        }
+
+        .send-btn {
+          width: 45px;
+          height: 45px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/4616/4616809.png"
+            alt="Dimple AI"
+            class="ai-logo"
+          />
+          <div class="ai-title">Dimple AI</div>
+        </div>
+        <div class="user-info">
+          <div class="earnings-display">
+            <i class="fas fa-coins"></i>
+            <span id="currentEarnings">₦0.00</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Training Stats -->
+      <div class="stats-card">
+        <div class="stats-header">
+          <div class="stats-title">Training Stats</div>
+          <div class="status-indicator"></div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="trainingTime">0:00:00</div>
+            <div class="stat-label">Session Time</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="earnedToday">₦0.00</div>
+            <div class="stat-label">Earned Today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Interface -->
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="chat-title">
+            <span>AI Training Chat</span>
+            <div class="status-indicator"></div>
+          </div>
+          <div class="earnings-display">
+            <i class="fas fa-bolt"></i>
+            <span id="earningRate">₦0.0056/sec</span>
+          </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <div class="message message-ai">
+            <div>
+              Hello! I'm Dimple AI. Please train me by sending questions and
+              answers. You'll earn ₦0.0056 per second while training me!
+            </div>
+            <div class="message-time">Just now</div>
+          </div>
+        </div>
+        <div class="chat-input-container">
+          <textarea
+            class="chat-input"
+            id="chatInput"
+            placeholder="Type your question or answer here..."
+            rows="1"
+          ></textarea>
+          <button class="send-btn" id="sendBtn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Training Tips -->
+      <div class="tips-card">
+        <div class="tips-header">
+          <i class="fas fa-lightbulb"></i>
+          <div class="tips-title">Training Tips</div>
+        </div>
+        <div class="tips-list">
+          <div class="tip-item">
+            <i class="fas fa-check-circle"></i>
+            <span
+              >Ask questions and provide detailed answers to train the AI</span
+            >
+          </div>
+          <div class="tip-item">
+            <i class="fas fa-check-circle"></i>
+            <span>You earn ₦0.0056 per second while actively training</span>
+          </div>
+          <div class="tip-item">
+            <i class="fas fa-check-circle"></i>
+            <span>Be accurate - your training affects AI performance</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="ai.html" class="nav-item active">
+        <i class="fas fa-robot"></i>
+        <span>AI Train</span>
+      </a>
+      <a href="song.html" class="nav-item">
+        <i class="fas fa-music"></i>
+        <span>Music</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage">Message sent!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const chatInput = document.getElementById("chatInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const chatMessages = document.getElementById("chatMessages");
+      const currentEarnings = document.getElementById("currentEarnings");
+      const trainingTime = document.getElementById("trainingTime");
+      const earnedToday = document.getElementById("earnedToday");
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+
+      // Get user ID from session storage
+      const userId = sessionStorage.getItem("pendingUserId");
+
+      if (!userId) {
+        // Redirect to login if no user ID found
+        window.location.href = "login.html";
+      }
+
+      // State variables
+      let isTraining = false;
+      let sessionStartTime = null;
+      let sessionTimer = null;
+      let sessionEarnings = 0;
+      let dailyEarnings = 0;
+      let trainingData = [];
+      const EARNING_RATE = 0.0056; // NGN per second
+
+      // Load training data from localStorage
+      function loadTrainingData() {
+        const savedData = localStorage.getItem(
+          `dimpleAI_trainingData_${userId}`
+        );
+        if (savedData) {
+          trainingData = JSON.parse(savedData);
+        }
+      }
+
+      // Save training data to localStorage
+      function saveTrainingData() {
+        localStorage.setItem(
+          `dimpleAI_trainingData_${userId}`,
+          JSON.stringify(trainingData)
+        );
+      }
+
+      // Sync training data with Firebase (compressed)
+      async function syncTrainingData() {
+        try {
+          // Only sync every 5 minutes or when significant data is added
+          const compressedData = trainingData.map((item) => ({
+            q: item.question.substring(0, 100), // Store first 100 chars of question
+            a: item.answer.substring(0, 200), // Store first 200 chars of answer
+            t: item.timestamp,
+          }));
+
+          await database.ref(`users/${userId}/aiTraining`).set(compressedData);
+        } catch (error) {
+          console.error("Error syncing training data:", error);
+        }
+      }
+
+      // Format time as HH:MM:SS
+      function formatTime(seconds) {
+        const hrs = Math.floor(seconds / 3600);
+        const mins = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${hrs}:${mins.toString().padStart(2, "0")}:${secs
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      // Format currency
+      function formatCurrency(amount) {
+        return parseFloat(amount)
+          .toFixed(2)
+          .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+      }
+
+      // Show toast notification
+      function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError ? "toast error show" : "toast show";
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Start training session
+      function startTrainingSession() {
+        if (isTraining) return;
+
+        isTraining = true;
+        sessionStartTime = new Date();
+        sessionEarnings = 0;
+
+        // Start timer
+        sessionTimer = setInterval(() => {
+          const now = new Date();
+          const elapsedSeconds = Math.floor((now - sessionStartTime) / 1000);
+          trainingTime.textContent = formatTime(elapsedSeconds);
+
+          // Calculate earnings
+          const newEarnings = elapsedSeconds * EARNING_RATE;
+          sessionEarnings = newEarnings;
+          currentEarnings.textContent = `₦${formatCurrency(newEarnings)}`;
+
+          // Update every 10 seconds
+          if (elapsedSeconds % 10 === 0) {
+            updateUserBalance(newEarnings);
+          }
+        }, 1000);
+
+        showToast("Training session started! You're now earning money.");
+      }
+
+      // End training session
+      function endTrainingSession() {
+        if (!isTraining) return;
+
+        clearInterval(sessionTimer);
+        isTraining = false;
+
+        // Final balance update
+        updateUserBalance(sessionEarnings);
+
+        // Add to daily earnings
+        dailyEarnings += sessionEarnings;
+        earnedToday.textContent = `₦${formatCurrency(dailyEarnings)}`;
+
+        showToast(
+          `Session ended. You earned ₦${formatCurrency(sessionEarnings)}`
+        );
+      }
+
+      // Update user balance in Firebase
+      async function updateUserBalance(amount) {
+        try {
+          const userRef = database.ref(`users/${userId}`);
+          const snapshot = await userRef.once("value");
+          const userData = snapshot.val();
+
+          if (userData) {
+            const currentBalance = userData.balance || 0;
+            const newBalance = currentBalance + amount;
+
+            await userRef.update({
+              balance: newBalance,
+            });
+          }
+        } catch (error) {
+          console.error("Error updating balance:", error);
+        }
+      }
+
+      // Add message to chat
+      function addMessage(text, isUser = false) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${
+          isUser ? "message-user" : "message-ai"
+        }`;
+
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        messageDiv.innerHTML = `
+                <div>${text}</div>
+                <div class="message-time">${timeString}</div>
+            `;
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Start training session if user sends a message
+        if (isUser && !isTraining) {
+          startTrainingSession();
+        }
+      }
+
+      // Process user input
+      async function processUserInput() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        addMessage(text, true);
+        chatInput.value = "";
+
+        // Add to training data
+        trainingData.push({
+          question: text,
+          answer: "", // Will be filled when AI responds
+          timestamp: new Date().toISOString(),
+        });
+
+        saveTrainingData();
+
+        // Generate AI response
+        setTimeout(() => {
+          const response = generateAIResponse(text);
+          addMessage(response);
+
+          // Add answer to training data
+          if (trainingData.length > 0) {
+            trainingData[trainingData.length - 1].answer = response;
+            saveTrainingData();
+
+            // Sync with Firebase periodically
+            if (trainingData.length % 5 === 0) {
+              syncTrainingData();
+            }
+          }
+        }, 1000 + Math.random() * 2000); // Simulate AI thinking time
+      }
+
+      // Generate AI response based on training data
+      function generateAIResponse(question) {
+        // Simple keyword matching from training data
+        const keywords = question.toLowerCase().split(/\s+/);
+
+        // Find matching answers from training data
+        const matchingAnswers = trainingData
+          .filter((item) =>
+            keywords.some(
+              (keyword) =>
+                item.question.toLowerCase().includes(keyword) && item.answer
+            )
+          )
+          .map((item) => item.answer);
+
+        if (matchingAnswers.length > 0) {
+          // Return a random matching answer
+          return matchingAnswers[
+            Math.floor(Math.random() * matchingAnswers.length)
+          ];
+        }
+
+        // Default responses if no match found
+        const defaultResponses = [
+          "That's an interesting question. Can you provide more details?",
+          "I'm still learning about that. Could you explain it to me?",
+          "Thanks for your input! This helps me learn.",
+          "Can you rephrase that or provide an example?",
+          "I'm not sure about that yet. Would you like to teach me?",
+        ];
+
+        return defaultResponses[
+          Math.floor(Math.random() * defaultResponses.length)
+        ];
+      }
+
+      // Initialize
+      function init() {
+        loadTrainingData();
+
+        // Load user data
+        database
+          .ref(`users/${userId}`)
+          .once("value")
+          .then((snapshot) => {
+            const userData = snapshot.val();
+            if (userData) {
+              // Load daily earnings (mock - in production you'd track this properly)
+              dailyEarnings = userData.todayEarnings || 0;
+              earnedToday.textContent = `₦${formatCurrency(dailyEarnings)}`;
+
+              // Load compressed training data if any
+              if (userData.aiTraining) {
+                // Merge with local data
+                userData.aiTraining.forEach((item) => {
+                  if (
+                    !trainingData.some((td) => td.question.includes(item.q))
+                  ) {
+                    trainingData.push({
+                      question: item.q,
+                      answer: item.a,
+                      timestamp: item.t || new Date().toISOString(),
+                    });
+                  }
+                });
+                saveTrainingData();
+              }
+            }
+          });
+
+        // Set up event listeners
+        sendBtn.addEventListener("click", processUserInput);
+
+        chatInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            processUserInput();
+          }
+        });
+
+        // Auto-resize textarea
+        chatInput.addEventListener("input", function () {
+          this.style.height = "auto";
+          this.style.height = this.scrollHeight + "px";
+        });
+
+        // End training session when user leaves page
+        window.addEventListener("beforeunload", () => {
+          if (isTraining) {
+            endTrainingSession();
+            syncTrainingData();
+          }
+        });
+
+        // End training session after 5 minutes of inactivity
+        let inactivityTimer;
+        function resetInactivityTimer() {
+          clearTimeout(inactivityTimer);
+          inactivityTimer = setTimeout(() => {
+            if (isTraining) {
+              endTrainingSession();
+            }
+          }, 5 * 60 * 1000); // 5 minutes
+        }
+
+        // Reset timer on any activity
+        window.addEventListener("mousemove", resetInactivityTimer);
+        window.addEventListener("keypress", resetInactivityTimer);
+        window.addEventListener("click", resetInactivityTimer);
+        resetInactivityTimer();
+      }
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+
+      // Initialize the app
+      init();
+    </script>
+  </body>
+</html>

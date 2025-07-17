@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Dimple</title>
+    <meta
+      name="description"
+      content="Login to your Dimple account with your secure PIN"
+    />
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 480px;
+        background: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        transform-style: preserve-3d;
+        height: fit-content;
+        z-index: 1;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: -1;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        background: var(--bg-gradient);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        box-shadow: var(--shadow-sm);
+        animation: bounceIn 0.8s;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .user-info {
+        background: rgba(108, 92, 231, 0.05);
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(108, 92, 231, 0.1);
+        transition: var(--transition);
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .user-info:hover {
+        background: rgba(108, 92, 231, 0.08);
+      }
+
+      .user-email {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .user-email-label {
+        font-size: 13px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .user-email-value {
+        font-weight: 500;
+        color: var(--text);
+        word-break: break-all;
+        text-align: right;
+        flex: 1;
+        margin-left: 10px;
+      }
+
+      .edit-email-btn {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: var(--transition);
+      }
+
+      .edit-email-btn:hover {
+        color: var(--primary-dark);
+      }
+
+      .edit-email-btn i {
+        font-size: 12px;
+      }
+
+      .email-form {
+        display: none;
+        margin-top: 15px;
+        animation: fadeInUp 0.3s ease-out;
+      }
+
+      .email-form.active {
+        display: block;
+      }
+
+      .email-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        margin-bottom: 10px;
+        transition: var(--transition);
+      }
+
+      .email-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .email-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .email-btn {
+        padding: 8px 15px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .email-btn-cancel {
+        background: #f5f6fa;
+        border: 1px solid #eee;
+        color: #666;
+      }
+
+      .email-btn-cancel:hover {
+        background: #eee;
+      }
+
+      .email-btn-save {
+        background: var(--primary);
+        border: 1px solid var(--primary-dark);
+        color: white;
+      }
+
+      .email-btn-save:hover {
+        background: var(--primary-dark);
+      }
+
+      .pin-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 30px 0;
+      }
+
+      .pin-input {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        border: 2px solid #eee;
+        border-radius: var(--radius-sm);
+        background-color: #f9f9f9;
+        transition: var(--transition);
+        outline: none;
+      }
+
+      .pin-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        background-color: white;
+      }
+
+      .pin-input.error {
+        border-color: var(--error);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--bg-gradient);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.7;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn:hover:not(:disabled)::after {
+        left: 100%;
+      }
+
+      .forgot-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .forgot-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .forgot-link a:hover {
+        text-decoration: underline;
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 13px;
+        margin-top: 5px;
+        text-align: center;
+        display: none;
+      }
+
+      .success-message {
+        color: var(--success);
+        font-size: 13px;
+        margin-top: 5px;
+        text-align: center;
+        display: none;
+      }
+
+      .community-section {
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+        text-align: center;
+      }
+
+      .community-title {
+        font-size: 15px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      .community-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+        color: white;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        transition: var(--transition);
+        animation: pulse 2s infinite;
+      }
+
+      .community-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+      }
+
+      .community-btn i {
+        font-size: 18px;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translateX(-5px);
+        }
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translateX(5px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.5s;
+      }
+
+      /* Decorative Elements */
+      .decoration {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(108, 92, 231, 0.1);
+        z-index: 0;
+      }
+
+      .decoration-1 {
+        width: 120px;
+        height: 120px;
+        top: -50px;
+        right: -50px;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .decoration-2 {
+        width: 80px;
+        height: 80px;
+        bottom: 30px;
+        left: -30px;
+        animation: float 8s ease-in-out infinite 1s;
+      }
+
+      .decoration-3 {
+        width: 40px;
+        height: 40px;
+        bottom: 100px;
+        right: 30px;
+        animation: float 8s ease-in-out infinite 2s;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+          border-radius: 12px;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+
+        .pin-input {
+          width: 45px;
+          height: 55px;
+          font-size: 22px;
+        }
+
+        .btn {
+          padding: 14px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .container {
+          padding: 25px 15px;
+        }
+
+        .logo {
+          width: 70px;
+          height: 70px;
+          font-size: 24px;
+        }
+
+        h1 {
+          font-size: 20px;
+        }
+
+        .pin-input {
+          width: 40px;
+          height: 50px;
+          font-size: 20px;
+        }
+
+        .btn {
+          padding: 12px;
+          font-size: 15px;
+        }
+
+        .community-btn {
+          padding: 10px 15px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="decoration decoration-1"></div>
+      <div class="decoration decoration-2"></div>
+      <div class="decoration decoration-3"></div>
+
+      <div class="header">
+        <div class="logo">D</div>
+        <h1 class="animate__animated animate__fadeIn">Welcome Back</h1>
+        <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">
+          Secure login with your PIN
+        </p>
+      </div>
+
+      <div
+        class="user-info animate__animated animate__fadeIn animate__delay-2s"
+      >
+        <div class="user-email">
+          <span class="user-email-label">Logged in as:</span>
+          <span class="user-email-value" id="userEmailDisplay">loading...</span>
+          <button class="edit-email-btn" id="editEmailBtn">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+        </div>
+
+        <div class="email-form" id="emailForm">
+          <input
+            type="email"
+            class="email-input"
+            id="emailInput"
+            placeholder="Enter your new email"
+          />
+          <div class="email-actions">
+            <button
+              type="button"
+              class="email-btn email-btn-cancel"
+              id="cancelEmailBtn"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="email-btn email-btn-save"
+              id="saveEmailBtn"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <form id="loginForm">
+        <div class="pin-container" id="pinInputs">
+          <input
+            type="password"
+            class="pin-input"
+            maxlength="1"
+            data-index="0"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="password"
+            class="pin-input"
+            maxlength="1"
+            data-index="1"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="password"
+            class="pin-input"
+            maxlength="1"
+            data-index="2"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="password"
+            class="pin-input"
+            maxlength="1"
+            data-index="3"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+        </div>
+
+        <div class="error-message" id="loginError">
+          Invalid PIN. Please try again.
+        </div>
+
+        <button type="submit" class="btn" id="loginBtn" disabled>
+          <span id="btnText">Login</span>
+          <i
+            class="fas fa-spinner fa-spin"
+            id="btnSpinner"
+            style="display: none"
+          ></i>
+        </button>
+
+        <div class="forgot-link">
+          Forgot your PIN?
+          <a href="recover.html" id="forgotLink">Recover account</a>
+        </div>
+      </form>
+
+      <div
+        class="community-section animate__animated animate__fadeIn animate__delay-3s"
+      >
+        <div class="community-title">Join our growing community</div>
+        <a
+          href="https://t.me/dimplecommunity"
+          class="community-btn"
+          target="_blank"
+        >
+          <i class="fab fa-telegram"></i>
+          <span>Telegram Group</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const loginForm = document.getElementById("loginForm");
+      const pinInputs = document.querySelectorAll(".pin-input");
+      const loginBtn = document.getElementById("loginBtn");
+      const btnText = document.getElementById("btnText");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const loginError = document.getElementById("loginError");
+      const userEmailDisplay = document.getElementById("userEmailDisplay");
+      const editEmailBtn = document.getElementById("editEmailBtn");
+      const emailForm = document.getElementById("emailForm");
+      const emailInput = document.getElementById("emailInput");
+      const cancelEmailBtn = document.getElementById("cancelEmailBtn");
+      const saveEmailBtn = document.getElementById("saveEmailBtn");
+
+      // User data
+      let currentUser = null;
+      let currentUserId = null;
+
+      // Function to check if all PIN inputs are filled
+      function checkPINInputs() {
+        const allFilled = Array.from(pinInputs).every(
+          (input) => input.value.trim() !== ""
+        );
+        loginBtn.disabled = !allFilled;
+      }
+
+      // PIN input handling
+      pinInputs.forEach((input, index) => {
+        // Focus on first input
+        if (index === 0) {
+          input.focus();
+        }
+
+        // Handle input
+        input.addEventListener("input", (e) => {
+          const value = e.target.value;
+
+          // Only allow numbers
+          if (value && !/^\d+$/.test(value)) {
+            e.target.value = "";
+            return;
+          }
+
+          // Move to next input if current has value
+          if (value && index < pinInputs.length - 1) {
+            pinInputs[index + 1].focus();
+          }
+
+          // Check if all inputs are filled
+          checkPINInputs();
+        });
+
+        // Handle backspace
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !input.value && index > 0) {
+            pinInputs[index - 1].focus();
+          }
+        });
+
+        // Handle paste
+        input.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const pasteData = e.clipboardData.getData("text/plain").trim();
+
+          if (/^\d{4}$/.test(pasteData)) {
+            for (let i = 0; i < 4; i++) {
+              if (i < pinInputs.length) {
+                pinInputs[i].value = pasteData[i];
+              }
+            }
+
+            // Focus last input
+            pinInputs[3].focus();
+            checkPINInputs();
+          }
+        });
+      });
+
+      // Edit email handlers
+      editEmailBtn.addEventListener("click", () => {
+        emailForm.classList.add("active");
+        emailInput.value = currentUser?.email || "";
+        emailInput.focus();
+      });
+
+      cancelEmailBtn.addEventListener("click", () => {
+        emailForm.classList.remove("active");
+      });
+
+      saveEmailBtn.addEventListener("click", async () => {
+        const newEmail = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(newEmail)) {
+          alert("Please enter a valid email address");
+          return;
+        }
+
+        // Show loading
+        saveEmailBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Saving';
+        saveEmailBtn.disabled = true;
+
+        try {
+          // Check if email already exists in the database
+          const snapshot = await database
+            .ref("users")
+            .orderByChild("email")
+            .equalTo(newEmail)
+            .once("value");
+          if (snapshot.exists()) {
+            throw new Error("This email is already registered");
+          }
+
+          // Update email in Firebase (using the same structure as your auth.html)
+          await database.ref("users/" + currentUserId).update({
+            email: newEmail,
+          });
+
+          // Update local state
+          currentUser.email = newEmail;
+          updateEmailDisplay(newEmail);
+
+          // Hide form
+          emailForm.classList.remove("active");
+
+          // Show success message
+          alert("Email updated successfully!");
+        } catch (error) {
+          console.error("Error updating email:", error);
+          alert(error.message || "Failed to update email. Please try again.");
+        } finally {
+          saveEmailBtn.innerHTML = "Save";
+          saveEmailBtn.disabled = false;
+        }
+      });
+
+      // Update email display with hidden middle part
+      function updateEmailDisplay(email) {
+        if (!email) return;
+
+        const [name, domain] = email.split("@");
+        const hiddenName =
+          name.length > 3
+            ? name.substring(0, 3) + "*".repeat(name.length - 3)
+            : "*".repeat(name.length);
+        userEmailDisplay.textContent = `${hiddenName}@${domain}`;
+      }
+
+      // Login form submission
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get PIN code
+        const pinCode = Array.from(pinInputs)
+          .map((input) => input.value)
+          .join("");
+
+        // Show loading
+        btnText.style.display = "none";
+        btnSpinner.style.display = "inline-block";
+        loginBtn.disabled = true;
+        loginError.style.display = "none";
+
+        try {
+          // Verify PIN with Firebase
+          const snapshot = await database
+            .ref("users/" + currentUserId)
+            .once("value");
+          const userData = snapshot.val();
+
+          if (!userData) {
+            throw new Error("User not found");
+          }
+
+          // Check PIN (in a real app, you should hash and compare)
+          if (userData.pin !== pinCode) {
+            throw new Error("Invalid PIN");
+          }
+
+          // Login successful - redirect to dashboard
+          sessionStorage.setItem("currentUserId", currentUserId);
+          window.location.href = "dashboard.html";
+        } catch (error) {
+          console.error("Login error:", error);
+          loginError.style.display = "block";
+          loginError.textContent = error.message || "Invalid PIN";
+
+          // Add shake animation to inputs
+          pinInputs.forEach((input) => {
+            input.classList.add("shake", "error");
+            setTimeout(() => {
+              input.classList.remove("shake");
+            }, 500);
+          });
+
+          // Clear PIN inputs
+          pinInputs.forEach((input) => {
+            input.value = "";
+          });
+          pinInputs[0].focus();
+        } finally {
+          btnText.style.display = "inline";
+          btnSpinner.style.display = "none";
+          loginBtn.disabled = false;
+        }
+      });
+
+      // Initialize the page
+      async function initPage() {
+        // Get user ID from session storage (from confirmation.html)
+        currentUserId = sessionStorage.getItem("pendingUserId");
+
+        if (!currentUserId) {
+          // If not coming from confirmation flow, try to get from previous login
+          currentUserId = sessionStorage.getItem("currentUserId");
+        }
+
+        if (!currentUserId) {
+          // If no user ID found, redirect to auth page
+          // window.location.href = "auth.html";
+          // return;
+        }
+
+        try {
+          // Fetch user data from Firebase
+          const snapshot = await database
+            .ref("users/" + currentUserId)
+            .once("value");
+          currentUser = snapshot.val();
+
+          if (currentUser) {
+            updateEmailDisplay(currentUser.email);
+            sessionStorage.setItem("currentUserId", currentUserId);
+          } else {
+            throw new Error("User not found");
+          }
+        } catch (error) {
+          console.error("Error loading user data:", error);
+          userEmailDisplay.textContent = "Error loading account";
+          // Redirect to auth page if user not found
+          // setTimeout(() => {
+          //   window.location.href = "auth.html";
+          // }, 2000);
+        }
+      }
+
+      // Initialize button states
+      loginBtn.disabled = true;
+
+      // Initialize the page
+      initPage();
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>

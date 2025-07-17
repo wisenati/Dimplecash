@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Verify Your Account | Dimple</title>
+    <meta
+      name="description"
+      content="Verify your Dimple account with the OTP sent to your email"
+    />
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 480px;
+        background: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        transform-style: preserve-3d;
+        height: fit-content;
+        z-index: 1;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: -1;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        background: var(--bg-gradient);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        box-shadow: var(--shadow-sm);
+        animation: bounceIn 0.8s;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .otp-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 30px 0;
+        gap: 10px;
+      }
+
+      .otp-input {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        border: 2px solid #eee;
+        border-radius: var(--radius-sm);
+        background-color: #f9f9f9;
+        transition: var(--transition);
+        outline: none;
+      }
+
+      .otp-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        background-color: white;
+      }
+
+      .otp-input.error {
+        border-color: var(--error);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--bg-gradient);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.7;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn:hover:not(:disabled)::after {
+        left: 100%;
+      }
+
+      .resend-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .resend-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      .resend-link a:hover {
+        text-decoration: underline;
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 13px;
+        margin-top: 5px;
+        text-align: center;
+        display: none;
+      }
+
+      .success-message {
+        color: var(--success);
+        font-size: 13px;
+        margin-top: 5px;
+        text-align: center;
+        display: none;
+      }
+
+      .countdown {
+        color: var(--primary);
+        font-weight: 600;
+      }
+
+      /* Bottom Sheet Styles */
+      .bottom-sheet {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: var(--radius) var(--radius) 0 0;
+        padding: 25px;
+        box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: var(--transition);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .bottom-sheet.active {
+        bottom: 0;
+      }
+
+      .bottom-sheet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .bottom-sheet-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .close-sheet {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #999;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .close-sheet:hover {
+        color: var(--error);
+      }
+
+      .sheet-content {
+        margin-bottom: 20px;
+      }
+
+      .sheet-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #777;
+      }
+
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: var(--transition);
+      }
+
+      .overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translateX(-5px);
+        }
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translateX(5px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.5s;
+      }
+
+      /* Decorative Elements */
+      .decoration {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(108, 92, 231, 0.1);
+        z-index: 0;
+      }
+
+      .decoration-1 {
+        width: 120px;
+        height: 120px;
+        top: -50px;
+        right: -50px;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .decoration-2 {
+        width: 80px;
+        height: 80px;
+        bottom: 30px;
+        left: -30px;
+        animation: float 8s ease-in-out infinite 1s;
+      }
+
+      .decoration-3 {
+        width: 40px;
+        height: 40px;
+        bottom: 100px;
+        right: 30px;
+        animation: float 8s ease-in-out infinite 2s;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+          border-radius: 12px;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+
+        .otp-input {
+          width: 45px;
+          height: 55px;
+          font-size: 22px;
+        }
+
+        .btn {
+          padding: 14px;
+        }
+
+        .bottom-sheet {
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .container {
+          padding: 25px 15px;
+        }
+
+        .logo {
+          width: 70px;
+          height: 70px;
+          font-size: 24px;
+        }
+
+        h1 {
+          font-size: 20px;
+        }
+
+        .otp-input {
+          width: 40px;
+          height: 50px;
+          font-size: 20px;
+        }
+
+        .btn {
+          padding: 12px;
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="decoration decoration-1"></div>
+      <div class="decoration decoration-2"></div>
+      <div class="decoration decoration-3"></div>
+
+      <div class="header">
+        <div class="logo">D</div>
+        <h1 class="animate__animated animate__fadeIn">Verify Your Account</h1>
+        <p
+          class="subtitle animate__animated animate__fadeIn animate__delay-1s"
+          id="emailDisplay"
+        >
+          Enter the 6-digit code sent to your email
+        </p>
+      </div>
+
+      <form id="otpForm">
+        <div class="otp-container" id="otpInputs">
+          <input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+            data-index="0"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+            data-index="1"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+            data-index="2"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+            data-index="3"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+            data-index="4"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+          <input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+            data-index="5"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
+        </div>
+
+        <div class="error-message" id="otpError">
+          Invalid verification code. Please try again.
+        </div>
+
+        <div class="success-message" id="otpSuccess">
+          Verification successful! Setting up your account...
+        </div>
+
+        <button type="submit" class="btn" id="verifyBtn" disabled>
+          <span id="btnText">Verify</span>
+          <i
+            class="fas fa-spinner fa-spin"
+            id="btnSpinner"
+            style="display: none"
+          ></i>
+        </button>
+
+        <div class="resend-link">
+          Didn't receive the code? <a href="#" id="resendLink">Resend code</a>
+          <span id="countdown" class="countdown"></span>
+        </div>
+        <div class="resend-link">
+          Didn't stll receive the code?
+          <a href="2fa.html" id="resendLink">Confirm using another method</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bottom Sheet for PIN Setup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="bottom-sheet" id="pinSheet">
+      <div class="bottom-sheet-header">
+        <h3 class="bottom-sheet-title">Set Your Transaction PIN</h3>
+        <button class="close-sheet" id="closeSheet">&times;</button>
+      </div>
+      <div class="sheet-content">
+        <p>
+          For security, please set a 4-digit PIN that you'll use for
+          transactions and login.
+        </p>
+
+        <div
+          class="otp-container"
+          style="justify-content: center; margin: 30px 0"
+        >
+          <input
+            type="password"
+            class="otp-input"
+            maxlength="1"
+            data-index="0"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            style="width: 50px; height: 60px"
+          />
+          <input
+            type="password"
+            class="otp-input"
+            maxlength="1"
+            data-index="1"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            style="width: 50px; height: 60px"
+          />
+          <input
+            type="password"
+            class="otp-input"
+            maxlength="1"
+            data-index="2"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            style="width: 50px; height: 60px"
+          />
+          <input
+            type="password"
+            class="otp-input"
+            maxlength="1"
+            data-index="3"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            style="width: 50px; height: 60px"
+          />
+        </div>
+
+        <div
+          class="error-message"
+          id="pinError"
+          style="text-align: center"
+        ></div>
+      </div>
+      <button type="button" class="btn" id="setPinBtn" disabled>
+        <span>Set PIN</span>
+        <i
+          class="fas fa-spinner fa-spin"
+          id="pinSpinner"
+          style="display: none"
+        ></i>
+      </button>
+      <div class="sheet-footer">
+        <p>This PIN will be required for all transactions and logins.</p>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const otpForm = document.getElementById("otpForm");
+      const otpInputs = document.querySelectorAll(".otp-input");
+      const verifyBtn = document.getElementById("verifyBtn");
+      const btnText = document.getElementById("btnText");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const otpError = document.getElementById("otpError");
+      const otpSuccess = document.getElementById("otpSuccess");
+      const resendLink = document.getElementById("resendLink");
+      const countdown = document.getElementById("countdown");
+      const emailDisplay = document.getElementById("emailDisplay");
+
+      // Bottom sheet elements
+      const pinSheet = document.getElementById("pinSheet");
+      const overlay = document.getElementById("overlay");
+      const closeSheet = document.getElementById("closeSheet");
+      const pinInputs = pinSheet.querySelectorAll(".otp-input");
+      const setPinBtn = document.getElementById("setPinBtn");
+      const pinSpinner = document.getElementById("pinSpinner");
+      const pinError = document.getElementById("pinError");
+
+      // Get user data from session storage
+      const pendingUserId = sessionStorage.getItem("pendingUserId");
+      const pendingUserEmail = sessionStorage.getItem("pendingUserEmail");
+
+      // Display email with hidden middle part
+      if (pendingUserEmail) {
+        const [name, domain] = pendingUserEmail.split("@");
+        const hiddenName =
+          name.length > 3
+            ? name.substring(0, 3) + "*".repeat(name.length - 3)
+            : "*".repeat(name.length);
+        emailDisplay.textContent = `Enter the 6-digit code sent to ${hiddenName}@${domain}`;
+      }
+
+      // Countdown timer for resend
+      let countdownTime = 60;
+      let countdownInterval;
+
+      function startCountdown() {
+        clearInterval(countdownInterval);
+        countdownTime = 60;
+        resendLink.style.display = "none";
+        countdown.textContent = `(Resend in ${countdownTime}s)`;
+
+        countdownInterval = setInterval(() => {
+          countdownTime--;
+          countdown.textContent = `(Resend in ${countdownTime}s)`;
+
+          if (countdownTime <= 0) {
+            clearInterval(countdownInterval);
+            countdown.textContent = "";
+            resendLink.style.display = "inline";
+          }
+        }, 1000);
+      }
+
+      // Initialize countdown
+      startCountdown();
+
+      // Function to check if all OTP inputs are filled (modified to always return true)
+      function checkOTPInputs() {
+        return true; // Always return true to keep button enabled
+      }
+
+      // OTP input handling
+      otpInputs.forEach((input, index) => {
+        // Focus on first input
+        if (index === 0) {
+          input.focus();
+        }
+
+        // Handle input
+        input.addEventListener("input", (e) => {
+          const value = e.target.value;
+
+          // Only allow numbers
+          if (value && !/^\d+$/.test(value)) {
+            e.target.value = "";
+            return;
+          }
+
+          // Move to next input if current has value
+          if (value && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+
+          // Check if all inputs are filled (button will remain enabled regardless)
+          checkOTPInputs();
+        });
+
+        // Handle backspace
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !input.value && index > 0) {
+            otpInputs[index - 1].focus();
+          }
+        });
+
+        // Handle paste
+        input.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const pasteData = e.clipboardData.getData("text/plain").trim();
+
+          if (/^\d{6}$/.test(pasteData)) {
+            for (let i = 0; i < 6; i++) {
+              if (i < otpInputs.length) {
+                otpInputs[i].value = pasteData[i];
+              }
+            }
+
+            // Focus last input
+            otpInputs[5].focus();
+          }
+        });
+      });
+
+      // Enable verify button by default
+      verifyBtn.disabled = false;
+
+      // Resend OTP
+      resendLink.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // Show loading
+        const originalText = resendLink.innerHTML;
+        resendLink.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+        // Simulate API call to resend OTP (replace with actual API call)
+        setTimeout(() => {
+          // Reset OTP inputs
+          otpInputs.forEach((input) => {
+            input.value = "";
+            input.classList.remove("error");
+          });
+          otpInputs[0].focus();
+
+          // Show success message
+          otpError.style.display = "none";
+          otpSuccess.style.display = "block";
+          otpSuccess.textContent = "New verification code sent!";
+
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+            otpSuccess.style.display = "none";
+          }, 3000);
+
+          // Restart countdown
+          startCountdown();
+
+          // Restore original text
+          resendLink.innerHTML = originalText;
+        }, 1500);
+      });
+
+      // Verify OTP
+      otpForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get OTP code
+        const otpCode = Array.from(otpInputs)
+          .map((input) => input.value)
+          .join("");
+
+        // Show loading
+        btnText.style.display = "none";
+        btnSpinner.style.display = "inline-block";
+        verifyBtn.disabled = true;
+        otpError.style.display = "none";
+
+        try {
+          // Verify OTP with Firebase
+          const snapshot = await database
+            .ref("users/" + pendingUserId)
+            .once("value");
+          const userData = snapshot.val();
+
+          if (!userData) {
+            throw new Error("User not found");
+          }
+
+          // Convert both OTPs to strings for comparison
+          const storedOTP = userData.otp ? userData.otp.toString() : "";
+          const enteredOTP = otpCode.toString();
+
+          if (storedOTP !== enteredOTP) {
+            throw new Error("Invalid verification code");
+          }
+
+          // OTP is valid
+          otpSuccess.style.display = "block";
+          otpSuccess.textContent =
+            "Verification successful! Setting up your account...";
+
+          // Update user status in Firebase
+          await database.ref("users/" + pendingUserId).update({
+            status: "verified",
+            otp: null, // Remove OTP after successful verification
+            verifiedAt: firebase.database.ServerValue.TIMESTAMP,
+          });
+
+          // Show PIN setup bottom sheet after delay
+          setTimeout(() => {
+            showPinSheet();
+          }, 1500);
+        } catch (error) {
+          console.error("Verification error:", error);
+          otpError.style.display = "block";
+          otpError.textContent = error.message || "Invalid verification code";
+
+          // Add shake animation to inputs
+          otpInputs.forEach((input) => {
+            input.classList.add("shake", "error");
+            setTimeout(() => {
+              input.classList.remove("shake");
+            }, 500);
+          });
+        } finally {
+          btnText.style.display = "inline";
+          btnSpinner.style.display = "none";
+          verifyBtn.disabled = false; // Re-enable button after attempt
+        }
+      });
+
+      // Bottom sheet functions
+      function showPinSheet() {
+        pinSheet.classList.add("active");
+        overlay.classList.add("active");
+        document.body.style.overflow = "hidden";
+
+        // Focus first PIN input
+        setTimeout(() => {
+          pinInputs[0].focus();
+        }, 300);
+      }
+
+      function hidePinSheet() {
+        pinSheet.classList.remove("active");
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      // Close sheet handlers
+      closeSheet.addEventListener("click", hidePinSheet);
+      overlay.addEventListener("click", hidePinSheet);
+
+      // Function to check if all PIN inputs are filled
+      function checkPINInputs() {
+        const allFilled = Array.from(pinInputs).every(
+          (input) => input.value.trim() !== ""
+        );
+        setPinBtn.disabled = !allFilled;
+      }
+
+      // PIN input handling
+      pinInputs.forEach((input, index) => {
+        // Handle input
+        input.addEventListener("input", (e) => {
+          const value = e.target.value;
+
+          // Only allow numbers
+          if (value && !/^\d+$/.test(value)) {
+            e.target.value = "";
+            return;
+          }
+
+          // Move to next input if current has value
+          if (value && index < pinInputs.length - 1) {
+            pinInputs[index + 1].focus();
+          }
+
+          // Check if all inputs are filled
+          checkPINInputs();
+        });
+
+        // Handle backspace
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !input.value && index > 0) {
+            pinInputs[index - 1].focus();
+          }
+        });
+      });
+
+      // Set PIN handler
+      setPinBtn.addEventListener("click", async () => {
+        // Get PIN code
+        const pinCode = Array.from(pinInputs)
+          .map((input) => input.value)
+          .join("");
+
+        // Validate PIN (simple check for demo)
+        if (pinCode.length !== 4) {
+          pinError.style.display = "block";
+          pinError.textContent = "Please enter a 4-digit PIN";
+          return;
+        }
+
+        // Check for simple PINs (for security)
+        if (
+          /(\d)\1{3}/.test(pinCode) || // All same digits
+          "1234" === pinCode ||
+          "4321" === pinCode || // Sequential
+          "0000" === pinCode ||
+          "1111" === pinCode
+        ) {
+          pinError.style.display = "block";
+          pinError.textContent = "Please choose a stronger PIN";
+          return;
+        }
+
+        // Show loading
+        setPinBtn.disabled = true;
+        pinSpinner.style.display = "inline-block";
+        pinError.style.display = "none";
+
+        try {
+          // Save PIN to Firebase (in a real app, this should be hashed)
+          await database.ref("users/" + pendingUserId).update({
+            pin: pinCode,
+            pinSetAt: firebase.database.ServerValue.TIMESTAMP,
+          });
+
+          // Redirect to dashboard after short delay
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1000);
+        } catch (error) {
+          console.error("Error saving PIN:", error);
+          pinError.style.display = "block";
+          pinError.textContent = "Failed to set PIN. Please try again.";
+          setPinBtn.disabled = false;
+        } finally {
+          pinSpinner.style.display = "none";
+        }
+      });
+
+      // Initialize button states
+      verifyBtn.disabled = false; // Always enabled
+      setPinBtn.disabled = true;
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>

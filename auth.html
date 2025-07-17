@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Your Account | Dimple</title>
+    <meta
+      name="description"
+      content="Join Dimple and get NGN 300 for each verified referral"
+    />
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --accent: #fd79a8;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --referral: #ffeaa7;
+        --bg-gradient: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--secondary) 100%
+        );
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 480px;
+        background: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        transform-style: preserve-3d;
+        height: fit-content;
+        z-index: 1;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: -1;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        background: var(--bg-gradient);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        box-shadow: var(--shadow-sm);
+        animation: bounceIn 0.8s;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .referral-banner {
+        background-color: var(--referral);
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        animation: pulse 2s infinite;
+        border-left: 4px solid var(--primary);
+      }
+
+      .referral-banner strong {
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 16px;
+      }
+
+      input {
+        width: 100%;
+        padding: 15px 15px 15px 45px;
+        border: 2px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        transition: var(--transition);
+        background-color: #f9f9f9;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        background-color: white;
+      }
+
+      input.error {
+        border-color: var(--error);
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 12px;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--bg-gradient);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+        opacity: 0.7;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn:hover:not(:disabled)::after {
+        left: 100%;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #777;
+      }
+
+      .footer a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* Toast notification */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.error {
+        background: var(--error);
+      }
+
+      .toast.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Decorative Elements */
+      .decoration {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(108, 92, 231, 0.1);
+        z-index: 0;
+      }
+
+      .decoration-1 {
+        width: 120px;
+        height: 120px;
+        top: -50px;
+        right: -50px;
+        animation: float 8s ease-in-out infinite;
+      }
+
+      .decoration-2 {
+        width: 80px;
+        height: 80px;
+        bottom: 30px;
+        left: -30px;
+        animation: float 8s ease-in-out infinite 1s;
+      }
+
+      .decoration-3 {
+        width: 40px;
+        height: 40px;
+        bottom: 100px;
+        right: 30px;
+        animation: float 8s ease-in-out infinite 2s;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.2);
+        }
+        70% {
+          transform: scale(1.02);
+          box-shadow: 0 0 0 10px rgba(108, 92, 231, 0);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(108, 92, 231, 0);
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+          transform: translateX(-5px);
+        }
+        20%,
+        40%,
+        60%,
+        80% {
+          transform: translateX(5px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.5s;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+          border-radius: 12px;
+        }
+
+        h1 {
+          font-size: 22px;
+        }
+
+        input {
+          padding: 12px 12px 12px 40px;
+        }
+
+        .btn {
+          padding: 14px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .container {
+          padding: 25px 15px;
+        }
+
+        .logo {
+          width: 70px;
+          height: 70px;
+          font-size: 24px;
+        }
+
+        h1 {
+          font-size: 20px;
+        }
+
+        input {
+          padding: 10px 10px 10px 35px;
+          font-size: 13px;
+        }
+
+        .btn {
+          padding: 12px;
+          font-size: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="decoration decoration-1"></div>
+      <div class="decoration decoration-2"></div>
+      <div class="decoration decoration-3"></div>
+
+      <div class="header">
+        <div class="logo">D</div>
+        <h1 class="animate__animated animate__fadeIn">Create Your Account</h1>
+        <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">
+          Join us today and start your journey
+        </p>
+      </div>
+
+      <div
+        class="referral-banner animate__animated animate__fadeIn animate__delay-1s"
+      >
+        <i class="fas fa-gift"></i> Get <strong>NGN 300</strong> for each friend
+        who signs up!
+      </div>
+
+      <form id="registrationForm">
+        <div
+          class="form-group animate__animated animate__fadeIn animate__delay-1s"
+        >
+          <label for="fullName">Full Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              id="fullName"
+              placeholder="First and Last Name"
+              required
+            />
+          </div>
+          <div class="error-message" id="fullNameError">
+            Please enter your full name
+          </div>
+        </div>
+
+        <div
+          class="form-group animate__animated animate__fadeIn animate__delay-1s"
+        >
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope"></i>
+            <input
+              type="email"
+              id="email"
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+          <div class="error-message" id="emailError">
+            Please enter a valid email address
+          </div>
+        </div>
+
+        <div
+          class="form-group animate__animated animate__fadeIn animate__delay-1s"
+        >
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <i class="fas fa-at"></i>
+            <input
+              type="text"
+              id="username"
+              placeholder="Choose a username"
+              required
+            />
+          </div>
+          <div class="error-message" id="usernameError">
+            Username must be at least 4 characters
+          </div>
+        </div>
+
+        <div
+          class="form-group animate__animated animate__fadeIn animate__delay-2s"
+        >
+          <label for="referralCode">Referral Code (Optional)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user-friends"></i>
+            <input
+              type="text"
+              id="referralCode"
+              placeholder="Invitee's username"
+            />
+          </div>
+          <div class="error-message" id="referralError">
+            Referral code not found
+          </div>
+        </div>
+
+        <div
+          class="form-group animate__animated animate__fadeIn animate__delay-2s"
+        >
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="Create a password"
+              required
+            />
+          </div>
+          <div class="error-message" id="passwordError">
+            Password must be at least 6 characters
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn animate__animated animate__fadeIn animate__delay-3s"
+          id="submitBtn"
+        >
+          <span id="btnText">Sign Up</span>
+          <i
+            class="fas fa-spinner fa-spin"
+            id="btnSpinner"
+            style="display: none"
+          ></i>
+        </button>
+      </form>
+
+      <div class="footer animate__animated animate__fadeIn animate__delay-3s">
+        Already have an account? <a href="login.html">Sign In</a>
+      </div>
+    </div>
+
+    <!-- Toast notification element -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle" id="toastIcon"></i>
+      <span id="toastMessage"></span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Trusted Types policy to prevent security warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const registrationForm = document.getElementById("registrationForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const btnText = document.getElementById("btnText");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+      const toastIcon = document.getElementById("toastIcon");
+
+      // Form validation
+      function validateForm() {
+        let isValid = true;
+
+        // Full Name validation
+        const fullName = document.getElementById("fullName").value.trim();
+        if (fullName === "" || fullName.split(" ").length < 2) {
+          showError("fullNameError", "Please enter your full name");
+          isValid = false;
+        } else {
+          hideError("fullNameError");
+        }
+
+        // Email validation
+        const email = document.getElementById("email").value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          showError("emailError", "Please enter a valid email address");
+          isValid = false;
+        } else {
+          hideError("emailError");
+        }
+
+        // Username validation
+        const username = document.getElementById("username").value.trim();
+        if (username.length < 4) {
+          showError("usernameError", "Username must be at least 4 characters");
+          isValid = false;
+        } else {
+          hideError("usernameError");
+        }
+
+        // Password validation
+        const password = document.getElementById("password").value;
+        if (password.length < 6) {
+          showError("passwordError", "Password must be at least 6 characters");
+          isValid = false;
+        } else {
+          hideError("passwordError");
+        }
+
+        return isValid;
+      }
+
+      // Show error message
+      function showError(elementId, message) {
+        const element = document.getElementById(elementId);
+        element.textContent = message;
+        element.style.display = "block";
+        document
+          .getElementById(elementId.replace("Error", ""))
+          .classList.add("error");
+      }
+
+      // Hide error message
+      function hideError(elementId) {
+        const element = document.getElementById(elementId);
+        element.style.display = "none";
+        document
+          .getElementById(elementId.replace("Error", ""))
+          .classList.remove("error");
+      }
+
+      // Show toast notification
+      function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError ? "toast error" : "toast";
+        toastIcon.className = isError
+          ? "fas fa-exclamation-circle"
+          : "fas fa-check-circle";
+        toast.style.display = "flex";
+
+        setTimeout(() => {
+          toast.style.opacity = 1;
+        }, 10);
+
+        setTimeout(() => {
+          toast.style.opacity = 0;
+          setTimeout(() => {
+            toast.style.display = "none";
+          }, 300);
+        }, 3000);
+      }
+
+      // Check if username exists
+      async function checkUsernameExists(username) {
+        try {
+          const snapshot = await database
+            .ref("users")
+            .orderByChild("username")
+            .equalTo(username.toLowerCase())
+            .once("value");
+          return snapshot.exists();
+        } catch (error) {
+          console.error("Error checking username:", error);
+          return false;
+        }
+      }
+
+      // Check if referral code exists
+      async function checkReferralExists(referralCode) {
+        if (!referralCode) return true; // No referral code is valid
+
+        try {
+          const snapshot = await database
+            .ref("users")
+            .orderByChild("username")
+            .equalTo(referralCode.toLowerCase())
+            .once("value");
+          return snapshot.exists();
+        } catch (error) {
+          console.error("Error checking referral code:", error);
+          return false;
+        }
+      }
+
+      // Get referrer data
+      async function getReferrerData(referralCode) {
+        if (!referralCode) return null;
+
+        try {
+          const snapshot = await database
+            .ref("users")
+            .orderByChild("username")
+            .equalTo(referralCode.toLowerCase())
+            .once("value");
+
+          if (snapshot.exists()) {
+            let referrerData = null;
+            snapshot.forEach((childSnapshot) => {
+              referrerData = {
+                id: childSnapshot.key,
+                ...childSnapshot.val(),
+              };
+            });
+            return referrerData;
+          }
+          return null;
+        } catch (error) {
+          console.error("Error getting referrer data:", error);
+          return null;
+        }
+      }
+
+      // Save user data to Firebase
+      async function saveUserData(userData) {
+        try {
+          const newUserRef = database.ref("users").push();
+          await newUserRef.set(userData);
+          return newUserRef.key;
+        } catch (error) {
+          console.error("Error saving user data:", error);
+          throw error;
+        }
+      }
+
+      // Update referrer's balance and referrals
+      async function updateReferrer(referrerId, newUserId) {
+        try {
+          // Get current referrer data
+          const referrerSnapshot = await database
+            .ref(`users/${referrerId}`)
+            .once("value");
+          const referrerData = referrerSnapshot.val();
+
+          // Initialize referrals array if it doesn't exist
+          const referrals = referrerData.referrals || [];
+
+          // Add new referral (pending verification)
+          referrals.push({
+            userId: newUserId,
+            date: firebase.database.ServerValue.TIMESTAMP,
+            status: "pending",
+            amount: 300,
+          });
+
+          // Update referrer's record
+          await database.ref(`users/${referrerId}`).update({
+            referrals: referrals,
+          });
+
+          return true;
+        } catch (error) {
+          console.error("Error updating referrer:", error);
+          return false;
+        }
+      }
+
+      // Generate OTP
+      function generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+      }
+
+      // Form submission
+      registrationForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        const fullName = document.getElementById("fullName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const username = document
+          .getElementById("username")
+          .value.trim()
+          .toLowerCase();
+        const referralCode = document
+          .getElementById("referralCode")
+          .value.trim();
+        const password = document.getElementById("password").value;
+
+        // Show loading state
+        btnText.style.display = "none";
+        btnSpinner.style.display = "inline-block";
+        submitBtn.disabled = true;
+
+        try {
+          // Check if username already exists
+          const usernameExists = await checkUsernameExists(username);
+          if (usernameExists) {
+            showError("usernameError", "Username already taken");
+            throw new Error("Username taken");
+          }
+
+          // Check if referral code exists and get referrer data
+          let referrerData = null;
+          if (referralCode) {
+            const referralExists = await checkReferralExists(referralCode);
+            if (!referralExists) {
+              showError("referralError", "Referral code not found");
+              throw new Error("Invalid referral code");
+            }
+            referrerData = await getReferrerData(referralCode);
+          }
+
+          // Generate OTP
+          const otp = generateOTP();
+
+          // Prepare user data
+          const userData = {
+            fullName: fullName,
+            email: email,
+            username: username,
+            balance: 0.0,
+            verified: false,
+            referralCode: referralCode || null,
+            password: password, // Note: In production, never store plain passwords
+            createdAt: firebase.database.ServerValue.TIMESTAMP,
+            status: "pending", // Waiting for OTP verification
+            otp: otp,
+            otpCreatedAt: new Date().toISOString(),
+          };
+
+          // Save to Firebase
+          const userId = await saveUserData(userData);
+
+          // If referral code was provided, update referrer's record
+          if (referrerData) {
+            await updateReferrer(referrerData.id, userId);
+          }
+
+          // Store user ID and email in session storage
+          sessionStorage.setItem("pendingUserId", userId);
+          sessionStorage.setItem("pendingUserEmail", email);
+
+          // Show success message
+          showToast("Account created! Redirecting to verification...");
+
+          // Redirect to OTP confirmation page after delay
+          setTimeout(() => {
+            window.location.href = "confirmation.html";
+          }, 1500);
+        } catch (error) {
+          console.error("Registration error:", error);
+          showToast(
+            error.message || "An error occurred. Please try again.",
+            true
+          );
+        } finally {
+          // Reset loading state
+          btnText.style.display = "inline";
+          btnSpinner.style.display = "none";
+          submitBtn.disabled = false;
+        }
+      });
+
+      // Input validation on blur
+      document
+        .getElementById("fullName")
+        .addEventListener("blur", validateForm);
+      document.getElementById("email").addEventListener("blur", validateForm);
+      document
+        .getElementById("username")
+        .addEventListener("blur", validateForm);
+      document
+        .getElementById("password")
+        .addEventListener("blur", validateForm);
+
+      // Referral code validation on blur
+      document
+        .getElementById("referralCode")
+        .addEventListener("blur", async function () {
+          const referralCode = this.value.trim();
+          if (referralCode) {
+            try {
+              const exists = await checkReferralExists(referralCode);
+              if (!exists) {
+                showError("referralError", "Referral code not found");
+              } else {
+                hideError("referralError");
+              }
+            } catch (error) {
+              console.error("Error checking referral code:", error);
+            }
+          } else {
+            hideError("referralError");
+          }
+        });
+
+      // Animation for form elements
+      const formGroups = document.querySelectorAll(".form-group");
+      formGroups.forEach((group, index) => {
+        group.style.animation = `fadeInUp 0.5s ease-out ${
+          0.2 + index * 0.1
+        }s both`;
+      });
+    </script>
+  </body>
+</html>
