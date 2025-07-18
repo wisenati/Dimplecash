@@ -860,8 +860,10 @@
       const toast = document.getElementById("toast");
       const toastMessage = document.getElementById("toastMessage");
 
-      // Get user ID from session storage
-      const userId = sessionStorage.getItem("pendingUserId");
+      // Get user ID from localStorage (more persistent than sessionStorage)
+      const userId =
+        localStorage.getItem("userId") ||
+        sessionStorage.getItem("currentUserId");
 
       if (!userId) {
         // Redirect to login if no user ID found
@@ -878,6 +880,7 @@
         timerInterval: null,
         secondsChatted: 0,
         earningsRate: 470 / 3600, // ₦470 per hour = ₦470/3600 per second
+        isAuthenticated: true, // Track authentication state
       };
 
       // Foreign users data
@@ -946,8 +949,35 @@
         }, 3000);
       }
 
+      // Check user authentication
+      function checkAuth() {
+        database
+          .ref("users/" + userId)
+          .once("value")
+          .then((snapshot) => {
+            if (!snapshot.exists()) {
+              // User doesn't exist in database
+              logout();
+            }
+            currentChat.isAuthenticated = true;
+          })
+          .catch((error) => {
+            console.error("Auth check failed:", error);
+            logout();
+          });
+      }
+
+      // Logout function
+      function logout() {
+        localStorage.removeItem("userId");
+        sessionStorage.removeItem("currentUserId");
+        window.location.href = "login.html";
+      }
+
       // Load foreign users
       function loadForeignUsers() {
+        checkAuth(); // Verify user is still authenticated
+
         foreignUsersGrid.innerHTML = "";
         foreignUsers.forEach((user) => {
           const userCard = document.createElement("div");
@@ -955,12 +985,12 @@
             currentChat.foreignUserId === user.id ? "active" : ""
           }`;
           userCard.innerHTML = `
-            <img src="${user.avatar}" alt="${user.name}" class="user-avatar" />
-            <div class="user-name">${user.name}</div>
-            <div class="user-status ${
-              user.status === "active" ? "status-active" : "status-inactive"
-            }">${user.status === "active" ? "Active" : "Inactive"}</div>
-          `;
+        <img src="${user.avatar}" alt="${user.name}" class="user-avatar" />
+        <div class="user-name">${user.name}</div>
+        <div class="user-status ${
+          user.status === "active" ? "status-active" : "status-inactive"
+        }">${user.status === "active" ? "Active" : "Inactive"}</div>
+      `;
           userCard.addEventListener("click", () => startChat(user));
           foreignUsersGrid.appendChild(userCard);
         });
@@ -968,6 +998,12 @@
 
       // Start chat with a foreign user
       function startChat(user) {
+        if (!currentChat.isAuthenticated) {
+          showToast("Please login again", true);
+          logout();
+          return;
+        }
+
         currentChat.foreignUserId = user.id;
         currentChat.foreignUserName = user.name;
         currentChat.foreignUserAvatar = user.avatar;
@@ -1001,6 +1037,10 @@
 
         // Update timer every second
         currentChat.timerInterval = setInterval(() => {
+          if (!currentChat.isAuthenticated) {
+            clearInterval(currentChat.timerInterval);
+            return;
+          }
           currentChat.secondsChatted++;
           updateTimerDisplay();
         }, 1000);
@@ -1055,6 +1095,11 @@
 
       // Save earnings to Firebase
       function saveEarnings(earnings) {
+        if (!currentChat.isAuthenticated) {
+          showToast("Please login to save earnings", true);
+          return;
+        }
+
         // Get current user data
         database
           .ref("users/" + userId)
@@ -1086,6 +1131,12 @@
       // Load messages for current chat
       function loadMessages() {
         chatMessages.innerHTML = "";
+
+        if (!currentChat.isAuthenticated) {
+          showToast("Please login again", true);
+          logout();
+          return;
+        }
 
         // Get messages from Firebase
         database
@@ -1130,9 +1181,9 @@
         });
 
         messageDiv.innerHTML = `
-          <div class="message-bubble">${text}</div>
-          <div class="message-time">${timeString}</div>
-        `;
+      <div class="message-bubble">${text}</div>
+      <div class="message-time">${timeString}</div>
+    `;
 
         chatMessages.appendChild(messageDiv);
 
@@ -1144,6 +1195,12 @@
 
       // Send message
       function sendMessage() {
+        if (!currentChat.isAuthenticated) {
+          showToast("Please login again", true);
+          logout();
+          return;
+        }
+
         const messageText = messageInput.value.trim();
 
         if (messageText === "" || !currentChat.foreignUserId) {
@@ -1199,6 +1256,10 @@
 
       // Fetch user data from Firebase
       function fetchUserData() {
+        if (!currentChat.isAuthenticated) {
+          return;
+        }
+
         database
           .ref("users/" + userId)
           .once("value")
@@ -1238,6 +1299,9 @@
       // Initialize
       loadForeignUsers();
       fetchUserData();
+
+      // Set up periodic authentication check
+      setInterval(checkAuth, 30000); // Check every 30 seconds
 
       // Prevent dangerous site warnings
       if (window.trustedTypes && window.trustedTypes.createPolicy) {
