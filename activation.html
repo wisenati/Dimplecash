@@ -670,7 +670,7 @@
       const activateBtn = document.getElementById("activateBtn");
       const btnText = document.getElementById("btnText");
       const btnSpinner = document.getElementById("btnSpinner");
-      const verifiedCount = document.getElementById("verifiedCount");
+      const verifiedCountElement = document.getElementById("verifiedCount");
       const progressFill = document.getElementById("progressFill");
       const totalReferrals = document.getElementById("totalReferrals");
       const referralList = document.getElementById("referralList");
@@ -727,7 +727,12 @@
             .once("value");
           const userData = userSnapshot.val();
 
-          if (userData && userData.verified) {
+          if (!userData) {
+            showToast("User data not found", true);
+            return;
+          }
+
+          if (userData.verified) {
             // User is already verified
             showToast("Your account is already activated!", false);
             activateBtn.disabled = true;
@@ -750,7 +755,9 @@
           // Find users who have this user as their referrer
           for (const [id, user] of Object.entries(allUsers)) {
             if (
+              user &&
               user.referralCode &&
+              userData.username &&
               user.referralCode.toLowerCase() ===
                 userData.username.toLowerCase()
             ) {
@@ -758,10 +765,10 @@
                 id,
                 name: user.fullName || "Anonymous User",
                 date: user.createdAt,
-                verified: user.verified || false,
+                status: user.status || false,
               });
 
-              if (user.verified) {
+              if (user.status) {
                 verifiedReferrals++;
               }
             }
@@ -771,7 +778,7 @@
           updateReferralUI(referrals, verifiedReferrals);
         } catch (error) {
           console.error("Error fetching referrals:", error);
-          showToast("Error loading referral data", true);
+          showToast("Error loading referral data. Please try again.", true);
         }
       }
 
@@ -818,9 +825,9 @@
                 <div class="referral-date">${formatDate(referral.date)}</div>
               </div>
               <div class="referral-status ${
-                referral.verified ? "status-verified" : "status-pending"
+                referral.status ? "status-verified" : "status-pending"
               }">
-                ${referral.verified ? "Verified" : "Pending"}
+                ${referral.status ? "Verified" : "Pending"}
               </div>
             </div>
           `
