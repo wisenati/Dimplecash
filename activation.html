@@ -678,8 +678,10 @@
       const toastMessage = document.getElementById("toastMessage");
       const toastIcon = document.getElementById("toastIcon");
 
-      // Get user ID from session storage
-      const userId = sessionStorage.getItem("pendingUserId");
+      // Get user ID from session storage or local storage
+      const userId =
+        sessionStorage.getItem("pendingUserId") ||
+        localStorage.getItem("userId");
 
       if (!userId) {
         // Redirect to login if no user ID found
@@ -737,6 +739,11 @@
             showToast("Your account is already activated!", false);
             activateBtn.disabled = true;
             btnText.textContent = "Account Activated";
+
+            // Store user ID in both storage locations for consistency
+            sessionStorage.setItem("currentUserId", userId);
+            localStorage.setItem("userId", userId);
+
             return;
           }
 
@@ -805,32 +812,32 @@
         // Update referral list
         if (referrals.length === 0) {
           referralList.innerHTML = `
-            <div class="referral-empty" style="text-align: center; padding: 20px; color: #999;">
-              <i class="fas fa-user-friends" style="font-size: 24px; margin-bottom: 10px;"></i>
-              <p>No referrals yet</p>
-            </div>
-          `;
+        <div class="referral-empty" style="text-align: center; padding: 20px; color: #999;">
+          <i class="fas fa-user-friends" style="font-size: 24px; margin-bottom: 10px;"></i>
+          <p>No referrals yet</p>
+        </div>
+      `;
           return;
         }
 
         referralList.innerHTML = referrals
           .map(
             (referral) => `
-            <div class="referral-item">
-              <div class="referral-avatar">
-                <i class="fas fa-user"></i>
-              </div>
-              <div class="referral-info">
-                <div class="referral-name">${referral.name}</div>
-                <div class="referral-date">${formatDate(referral.date)}</div>
-              </div>
-              <div class="referral-status ${
-                referral.status ? "status-verified" : "status-pending"
-              }">
-                ${referral.status ? "Verified" : "Pending"}
-              </div>
-            </div>
-          `
+        <div class="referral-item">
+          <div class="referral-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="referral-info">
+            <div class="referral-name">${referral.name}</div>
+            <div class="referral-date">${formatDate(referral.date)}</div>
+          </div>
+          <div class="referral-status ${
+            referral.status ? "status-verified" : "status-pending"
+          }">
+            ${referral.status ? "Verified" : "Pending"}
+          </div>
+        </div>
+      `
           )
           .join("");
       }
@@ -848,6 +855,10 @@
             verified: true,
             verifiedAt: firebase.database.ServerValue.TIMESTAMP,
           });
+
+          // Store user ID in both storage locations for consistency
+          sessionStorage.setItem("currentUserId", userId);
+          localStorage.setItem("userId", userId);
 
           // Show success message
           showToast("Account activated successfully! Redirecting...");
