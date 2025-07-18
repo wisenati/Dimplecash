@@ -680,8 +680,8 @@
         </button>
 
         <div class="forgot-link">
-          Forgot your PIN?
-          <a href="recover.html" id="forgotLink">Recover account</a>
+          You don't have an account?
+          <a href="auth.html" id="forgotLink">Signup </a>
         </div>
       </form>
 
@@ -809,52 +809,11 @@
         emailForm.classList.remove("active");
       });
 
-      saveEmailBtn.addEventListener("click", async () => {
+      saveEmailBtn.addEventListener("click", () => {
         const newEmail = emailInput.value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(newEmail)) {
-          alert("Please enter a valid email address");
-          return;
-        }
-
-        // Show loading
-        saveEmailBtn.innerHTML =
-          '<i class="fas fa-spinner fa-spin"></i> Saving';
-        saveEmailBtn.disabled = true;
-
-        try {
-          // Check if email already exists in the database
-          const snapshot = await database
-            .ref("users")
-            .orderByChild("email")
-            .equalTo(newEmail)
-            .once("value");
-          if (snapshot.exists()) {
-            throw new Error("This email is already registered");
-          }
-
-          // Update email in Firebase (using the same structure as your auth.html)
-          await database.ref("users/" + currentUserId).update({
-            email: newEmail,
-          });
-
-          // Update local state
-          currentUser.email = newEmail;
-          updateEmailDisplay(newEmail);
-
-          // Hide form
-          emailForm.classList.remove("active");
-
-          // Show success message
-          alert("Email updated successfully!");
-        } catch (error) {
-          console.error("Error updating email:", error);
-          alert(error.message || "Failed to update email. Please try again.");
-        } finally {
-          saveEmailBtn.innerHTML = "Save";
-          saveEmailBtn.disabled = false;
-        }
+        emailForm.classList.remove("active");
+        updateEmailDisplay(newEmail);
+        // Don't actually save to database since we're allowing any email
       });
 
       // Update email display with hidden middle part
@@ -873,10 +832,23 @@
       loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Get PIN code
+        // Get email and PIN code
+        const email = emailInput.value.trim();
         const pinCode = Array.from(pinInputs)
           .map((input) => input.value)
           .join("");
+
+        if (!email) {
+          loginError.style.display = "block";
+          loginError.textContent = "Please enter an email address";
+          return;
+        }
+
+        if (pinCode.length !== 4) {
+          loginError.style.display = "block";
+          loginError.textContent = "Please enter a 4-digit PIN";
+          return;
+        }
 
         // Show loading
         btnText.style.display = "none";
@@ -885,28 +857,47 @@
         loginError.style.display = "none";
 
         try {
-          // Verify PIN with Firebase
+          // Find user by email in Firebase
           const snapshot = await database
-            .ref("users/" + currentUserId)
+            .ref("users")
+            .orderByChild("email")
+            .equalTo(email)
             .once("value");
-          const userData = snapshot.val();
 
-          if (!userData) {
-            throw new Error("User not found");
+          const users = snapshot.val();
+
+          if (!users) {
+            throw new Error("No account found with this email");
           }
 
+          // Get the first user found with this email
+          let userFound = null;
+          let userId = null;
+
+          snapshot.forEach((childSnapshot) => {
+            userId = childSnapshot.key;
+            userFound = childSnapshot.val();
+          });
+
           // Check PIN (in a real app, you should hash and compare)
-          if (userData.pin !== pinCode) {
+          if (userFound.pin !== pinCode) {
             throw new Error("Invalid PIN");
           }
 
-          // Login successful - redirect to dashboard
+          // Login successful
+          currentUser = userFound;
+          currentUserId = userId;
           sessionStorage.setItem("currentUserId", currentUserId);
+
+          // Update email display with the actual email from database
+          updateEmailDisplay(userFound.email);
+
+          // Redirect to dashboard
           window.location.href = "dashboard.html";
         } catch (error) {
           console.error("Login error:", error);
           loginError.style.display = "block";
-          loginError.textContent = error.message || "Invalid PIN";
+          loginError.textContent = error.message || "Login failed";
 
           // Add shake animation to inputs
           pinInputs.forEach((input) => {
@@ -928,47 +919,34 @@
         }
       });
 
-      // Initialize the page
-      async function initPage() {
-        // Get user ID from session storage (from confirmation.html)
-        currentUserId = sessionStorage.getItem("pendingUserId");
-
-        if (!currentUserId) {
-          // If not coming from confirmation flow, try to get from previous login
-          currentUserId = sessionStorage.getItem("currentUserId");
-        }
-
-        if (!currentUserId) {
-          // If no user ID found, redirect to auth page
-          // window.location.href = "auth.html";
-          // return;
-        }
-
-        try {
-          // Fetch user data from Firebase
-          const snapshot = await database
-            .ref("users/" + currentUserId)
-            .once("value");
-          currentUser = snapshot.val();
-
-          if (currentUser) {
-            updateEmailDisplay(currentUser.email);
-            sessionStorage.setItem("currentUserId", currentUserId);
-          } else {
-            throw new Error("User not found");
-          }
-        } catch (error) {
-          console.error("Error loading user data:", error);
-          userEmailDisplay.textContent = "Error loading account";
-          // Redirect to auth page if user not found
-          // setTimeout(() => {
-          //   window.location.href = "auth.html";
-          // }, 2000);
-        }
-      }
-
       // Initialize button states
       loginBtn.disabled = true;
+
+      // Initialize the page
+      function initPage() {
+        // Show email form by default since we want user to input email
+        emailForm.classList.add("active");
+        emailInput.focus();
+
+        // Check if we have a logged in user from session
+        const userId = sessionStorage.getItem("currentUserId");
+        if (userId) {
+          // Try to load user data
+          database
+            .ref("users/" + userId)
+            .once("value")
+            .then((snapshot) => {
+              const user = snapshot.val();
+              if (user) {
+                currentUser = user;
+                currentUserId = userId;
+                updateEmailDisplay(user.email);
+                emailInput.value = user.email;
+              }
+            })
+            .catch(console.error);
+        }
+      }
 
       // Initialize the page
       initPage();
