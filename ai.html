@@ -709,8 +709,10 @@
       const toast = document.getElementById("toast");
       const toastMessage = document.getElementById("toastMessage");
 
-      // Get user ID from session storage
-      const userId = sessionStorage.getItem("pendingUserId");
+      // Get user ID from localStorage first, then sessionStorage as fallback
+      const userId =
+        localStorage.getItem("userId") ||
+        sessionStorage.getItem("pendingUserId");
 
       if (!userId) {
         // Redirect to login if no user ID found
@@ -868,9 +870,9 @@
         });
 
         messageDiv.innerHTML = `
-                <div>${text}</div>
-                <div class="message-time">${timeString}</div>
-            `;
+      <div>${text}</div>
+      <div class="message-time">${timeString}</div>
+    `;
 
         chatMessages.appendChild(messageDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
