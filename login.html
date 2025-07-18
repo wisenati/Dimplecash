@@ -734,10 +734,6 @@
       const cancelEmailBtn = document.getElementById("cancelEmailBtn");
       const saveEmailBtn = document.getElementById("saveEmailBtn");
 
-      // User data
-      let currentUser = null;
-      let currentUserId = null;
-
       // Function to check if all PIN inputs are filled
       function checkPINInputs() {
         const allFilled = Array.from(pinInputs).every(
@@ -798,24 +794,6 @@
         });
       });
 
-      // Edit email handlers
-      editEmailBtn.addEventListener("click", () => {
-        emailForm.classList.add("active");
-        emailInput.value = currentUser?.email || "";
-        emailInput.focus();
-      });
-
-      cancelEmailBtn.addEventListener("click", () => {
-        emailForm.classList.remove("active");
-      });
-
-      saveEmailBtn.addEventListener("click", () => {
-        const newEmail = emailInput.value.trim();
-        emailForm.classList.remove("active");
-        updateEmailDisplay(newEmail);
-        // Don't actually save to database since we're allowing any email
-      });
-
       // Update email display with hidden middle part
       function updateEmailDisplay(email) {
         if (!email) return;
@@ -827,6 +805,28 @@
             : "*".repeat(name.length);
         userEmailDisplay.textContent = `${hiddenName}@${domain}`;
       }
+
+      // Edit email handlers
+      editEmailBtn.addEventListener("click", () => {
+        emailForm.classList.add("active");
+        emailInput.focus();
+      });
+
+      cancelEmailBtn.addEventListener("click", () => {
+        emailForm.classList.remove("active");
+      });
+
+      saveEmailBtn.addEventListener("click", () => {
+        const newEmail = emailInput.value.trim();
+        if (!newEmail) {
+          loginError.style.display = "block";
+          loginError.textContent = "Please enter a valid email";
+          return;
+        }
+
+        emailForm.classList.remove("active");
+        updateEmailDisplay(newEmail);
+      });
 
       // Login form submission
       loginForm.addEventListener("submit", async (e) => {
@@ -885,9 +885,10 @@
           }
 
           // Login successful
-          currentUser = userFound;
-          currentUserId = userId;
-          sessionStorage.setItem("currentUserId", currentUserId);
+          // Store user ID in both sessionStorage and localStorage
+          sessionStorage.setItem("currentUserId", userId);
+          localStorage.setItem("userId", userId);
+          localStorage.setItem("userEmail", email);
 
           // Update email display with the actual email from database
           updateEmailDisplay(userFound.email);
@@ -915,12 +916,9 @@
         } finally {
           btnText.style.display = "inline";
           btnSpinner.style.display = "none";
-          loginBtn.disabled = false;
+          checkPINInputs();
         }
       });
-
-      // Initialize button states
-      loginBtn.disabled = true;
 
       // Initialize the page
       function initPage() {
@@ -928,28 +926,19 @@
         emailForm.classList.add("active");
         emailInput.focus();
 
-        // Check if we have a logged in user from session
-        const userId = sessionStorage.getItem("currentUserId");
-        if (userId) {
-          // Try to load user data
-          database
-            .ref("users/" + userId)
-            .once("value")
-            .then((snapshot) => {
-              const user = snapshot.val();
-              if (user) {
-                currentUser = user;
-                currentUserId = userId;
-                updateEmailDisplay(user.email);
-                emailInput.value = user.email;
-              }
-            })
-            .catch(console.error);
+        // Check for remembered email
+        const rememberedEmail = localStorage.getItem("userEmail");
+        if (rememberedEmail) {
+          emailInput.value = rememberedEmail;
+          updateEmailDisplay(rememberedEmail);
         }
+
+        // Initialize button states
+        loginBtn.disabled = true;
       }
 
-      // Initialize the page
-      initPage();
+      // Initialize the page when DOM is loaded
+      document.addEventListener("DOMContentLoaded", initPage);
 
       // Prevent dangerous site warnings
       if (window.trustedTypes && window.trustedTypes.createPolicy) {
