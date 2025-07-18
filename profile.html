@@ -1236,14 +1236,25 @@
       let actualCvv = "";
       let cardNumberVisible = false;
       let cvvVisible = false;
+      let isCardApproved = false;
 
-      // Get user ID from session storage
-      const userId = sessionStorage.getItem("pendingUserId");
+      // Check authentication state
+      function checkAuthState() {
+        const userId =
+          localStorage.getItem("userId") ||
+          sessionStorage.getItem("currentUserId");
 
-      if (!userId) {
-        // Redirect to login if no user ID found
-        window.location.href = "login.html";
+        if (!userId) {
+          // Redirect to login if no user ID found
+          window.location.href = "login.html";
+          return null;
+        }
+
+        return userId;
       }
+
+      // Get user ID
+      const userId = checkAuthState();
 
       // Show toast notification
       function showToast(message, isError = false) {
@@ -1368,6 +1379,20 @@
             .getElementById("senderAccount")
             .value.trim();
 
+          // Validate required fields
+          if (
+            !fullName ||
+            !dob ||
+            !nin ||
+            !bvn ||
+            !phone ||
+            !state ||
+            !senderName ||
+            !senderAccount
+          ) {
+            throw new Error("Please fill all required fields");
+          }
+
           // Upload profile image if selected
           let imageUrl = "";
           const file = profileImage.files[0];
@@ -1443,7 +1468,10 @@
           document.getElementById("cardTab").classList.add("active");
         } catch (error) {
           console.error("Error submitting order:", error);
-          showToast("Error submitting order. Please try again.", true);
+          showToast(
+            error.message || "Error submitting order. Please try again.",
+            true
+          );
         } finally {
           // Reset button state
           submitOrderBtn.disabled = false;
@@ -1461,6 +1489,7 @@
             if (cardData) {
               actualCardNumber = cardData.number;
               actualCvv = cardData.cvv;
+              isCardApproved = cardData.status === "approved";
 
               // Format card number with spaces
               const formattedCardNumber = actualCardNumber.replace(
@@ -1472,12 +1501,30 @@
               cardNumber.textContent =
                 "•••• •••• •••• " + actualCardNumber.slice(-4);
               cardCvv.textContent = "•••";
+
+              // Disable card detail buttons if not approved
+              if (!isCardApproved) {
+                toggleCardNumber.disabled = true;
+                copyCardNumber.disabled = true;
+                toggleCvv.disabled = true;
+                copyCvv.disabled = true;
+                toggleCardNumber.innerHTML =
+                  '<i class="fas fa-eye"></i><span>Verify Payment</span>';
+              }
             }
           });
       }
 
       // Toggle card number visibility
       toggleCardNumber.addEventListener("click", () => {
+        if (!isCardApproved) {
+          showToast(
+            "Please wait for payment verification to view card details",
+            true
+          );
+          return;
+        }
+
         cardNumberVisible = !cardNumberVisible;
 
         if (cardNumberVisible) {
@@ -1498,6 +1545,14 @@
 
       // Copy card number
       copyCardNumber.addEventListener("click", () => {
+        if (!isCardApproved) {
+          showToast(
+            "Please wait for payment verification to copy card details",
+            true
+          );
+          return;
+        }
+
         navigator.clipboard
           .writeText(actualCardNumber)
           .then(() => {
@@ -1510,6 +1565,11 @@
 
       // Toggle CVV visibility
       toggleCvv.addEventListener("click", () => {
+        if (!isCardApproved) {
+          showToast("Please wait for payment verification to view CVV", true);
+          return;
+        }
+
         cvvVisible = !cvvVisible;
 
         if (cvvVisible) {
@@ -1527,6 +1587,11 @@
 
       // Copy CVV
       copyCvv.addEventListener("click", () => {
+        if (!isCardApproved) {
+          showToast("Please wait for payment verification to copy CVV", true);
+          return;
+        }
+
         navigator.clipboard
           .writeText(actualCvv)
           .then(() => {
@@ -1539,6 +1604,8 @@
 
       // Fetch user data from Firebase
       function fetchUserData() {
+        if (!userId) return;
+
         database
           .ref(`users/${userId}`)
           .once("value")
@@ -1576,14 +1643,31 @@
                 // Update actual values for toggling
                 actualCardNumber = userData.card.number;
                 actualCvv = userData.card.cvv;
+                isCardApproved = userData.card.status === "approved";
 
                 // Update card status
-                if (userData.card.status === "approved") {
+                if (isCardApproved) {
                   cardStatus.textContent = "Approved";
                   cardStatus.className = "history-status approved";
+
+                  // Enable card detail buttons
+                  toggleCardNumber.disabled = false;
+                  copyCardNumber.disabled = false;
+                  toggleCvv.disabled = false;
+                  copyCvv.disabled = false;
+                  toggleCardNumber.innerHTML =
+                    '<i class="fas fa-eye"></i><span>Show Number</span>';
                 } else {
                   cardStatus.textContent = "Pending";
                   cardStatus.className = "history-status pending";
+
+                  // Disable card detail buttons
+                  toggleCardNumber.disabled = true;
+                  copyCardNumber.disabled = true;
+                  toggleCvv.disabled = true;
+                  copyCvv.disabled = true;
+                  toggleCardNumber.innerHTML =
+                    '<i class="fas fa-eye"></i><span>Verify Payment</span>';
                 }
               } else {
                 noCardMessage.style.display = "block";
@@ -1602,6 +1686,8 @@
 
       // Fetch order history
       function fetchOrderHistory() {
+        if (!userId) return;
+
         database
           .ref("cardOrders")
           .orderByChild("userId")
@@ -1640,12 +1726,12 @@
                 else statusClass += "";
 
                 orderItem.innerHTML = `
-                  <div>
-                    <strong>${orderType}</strong>
-                    <div>${orderDate} - ₦${order.amount.toLocaleString()}</div>
-                  </div>
-                  <span class="${statusClass}">${order.status}</span>
-                `;
+          <div>
+            <strong>${orderType}</strong>
+            <div>${orderDate} - ₦${order.amount.toLocaleString()}</div>
+          </div>
+          <span class="${statusClass}">${order.status}</span>
+        `;
 
                 orderHistory.appendChild(orderItem);
               });
@@ -1660,6 +1746,8 @@
 
       // Real-time updates for card status
       function setupRealtimeUpdates() {
+        if (!userId) return;
+
         database.ref(`users/${userId}/card`).on("value", (snapshot) => {
           const cardData = snapshot.val();
 
@@ -1667,30 +1755,39 @@
             noCardMessage.style.display = "none";
             cardDetails.style.display = "block";
 
-            // Update card details
-            const maskedNumber = cardData.number.replace(
-              /(\d{4})(?=\d{4})/g,
-              "•••• "
-            );
-            cardNumber.textContent = maskedNumber;
-
             // Update actual values for toggling
             actualCardNumber = cardData.number;
             actualCvv = cardData.cvv;
+            isCardApproved = cardData.status === "approved";
 
             // Update card status
-            if (cardData.status === "approved") {
+            if (isCardApproved) {
               cardStatus.textContent = "Approved";
               cardStatus.className = "history-status approved";
+
+              // Enable card detail buttons
+              toggleCardNumber.disabled = false;
+              copyCardNumber.disabled = false;
+              toggleCvv.disabled = false;
+              copyCvv.disabled = false;
+              toggleCardNumber.innerHTML =
+                '<i class="fas fa-eye"></i><span>Show Number</span>';
 
               // If virtual card, show full details (for demo purposes)
               if (cardData.type === "virtual") {
                 cardExpiry.textContent = cardData.expiry;
-                // In a real app, you'd want to securely handle CVV display
               }
             } else {
               cardStatus.textContent = "Pending";
               cardStatus.className = "history-status pending";
+
+              // Disable card detail buttons
+              toggleCardNumber.disabled = true;
+              copyCardNumber.disabled = true;
+              toggleCvv.disabled = true;
+              copyCvv.disabled = true;
+              toggleCardNumber.innerHTML =
+                '<i class="fas fa-eye"></i><span>Verify Payment</span>';
             }
           } else {
             noCardMessage.style.display = "block";
@@ -1709,9 +1806,11 @@
       }
 
       // Initialize
-      fetchUserData();
-      setupRealtimeUpdates();
-      initCardDetails();
+      if (userId) {
+        fetchUserData();
+        setupRealtimeUpdates();
+        initCardDetails();
+      }
 
       // Prevent dangerous site warnings
       if (window.trustedTypes && window.trustedTypes.createPolicy) {
