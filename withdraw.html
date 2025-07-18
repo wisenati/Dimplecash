@@ -997,12 +997,30 @@
       const toastMessage = document.getElementById("toastMessage");
       const toastIcon = document.getElementById("toastIcon");
 
-      // Get user ID from session storage
-      const userId = sessionStorage.getItem("pendingUserId");
+      // Get user ID from storage
+      let userId = null;
 
-      if (!userId) {
-        // Redirect to login if no user ID found
-        window.location.href = "login.html";
+      // Check authentication state
+      function checkAuthState() {
+        // First try sessionStorage (more secure)
+        userId = sessionStorage.getItem("currentUserId");
+
+        // If not found in sessionStorage, try localStorage (for persistence)
+        if (!userId) {
+          userId = localStorage.getItem("userId");
+
+          // If found in localStorage, also store in sessionStorage
+          if (userId) {
+            sessionStorage.setItem("currentUserId", userId);
+          }
+        }
+
+        if (!userId) {
+          // Redirect to login if no user ID found
+          window.location.href = "login.html";
+          return false;
+        }
+        return true;
       }
 
       // Show toast notification
@@ -1037,6 +1055,8 @@
 
       // Fetch user data from Firebase
       function fetchUserData() {
+        if (!userId) return;
+
         database
           .ref(`users/${userId}`)
           .once("value")
@@ -1217,29 +1237,27 @@
 
             // Display success details
             successDetails.innerHTML = `
-              <div class="success-detail">
-                <span class="success-detail-label">Amount:</span>
-                <span class="success-detail-value">${formatCurrency(
-                  withdrawalData.amount
-                )}</span>
-              </div>
-              <div class="success-detail">
-                <span class="success-detail-label">Bank:</span>
-                <span class="success-detail-value">${
-                  withdrawalData.bankName
-                }</span>
-              </div>
-              <div class="success-detail">
-                <span class="success-detail-label">Account Number:</span>
-                <span class="success-detail-value">${
-                  withdrawalData.accountNumber
-                }</span>
-              </div>
-              <div class="success-detail">
-                <span class="success-detail-label">Status:</span>
-                <span class="success-detail-value" style="color: var(--success);">Pending</span>
-              </div>
-            `;
+        <div class="success-detail">
+          <span class="success-detail-label">Amount:</span>
+          <span class="success-detail-value">${formatCurrency(
+            withdrawalData.amount
+          )}</span>
+        </div>
+        <div class="success-detail">
+          <span class="success-detail-label">Bank:</span>
+          <span class="success-detail-value">${withdrawalData.bankName}</span>
+        </div>
+        <div class="success-detail">
+          <span class="success-detail-label">Account Number:</span>
+          <span class="success-detail-value">${
+            withdrawalData.accountNumber
+          }</span>
+        </div>
+        <div class="success-detail">
+          <span class="success-detail-label">Status:</span>
+          <span class="success-detail-value" style="color: var(--success);">Pending</span>
+        </div>
+      `;
 
             successMessage.classList.add("active");
             fetchUserData(); // Refresh balance
@@ -1254,10 +1272,20 @@
           });
       }
 
-      // Initialize
-      fetchUserData();
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
+      // Initialize the page
+      function initPage() {
+        if (checkAuthState()) {
+          fetchUserData();
+          updateCountdown();
+          setInterval(updateCountdown, 1000);
+
+          // Set up real-time balance updates
+          database.ref(`users/${userId}/balance`).on("value", (snapshot) => {
+            const balance = snapshot.val() || 0;
+            balanceAmount.textContent = formatCurrency(balance);
+          });
+        }
+      }
 
       // Withdrawal form submission
       withdrawalForm.addEventListener("submit", (e) => {
@@ -1341,11 +1369,8 @@
         successMessage.classList.remove("active");
       });
 
-      // Real-time balance updates
-      database.ref(`users/${userId}/balance`).on("value", (snapshot) => {
-        const balance = snapshot.val() || 0;
-        balanceAmount.textContent = formatCurrency(balance);
-      });
+      // Initialize the page when DOM is loaded
+      document.addEventListener("DOMContentLoaded", initPage);
     </script>
   </body>
 </html>
