@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Testimonials | Dimple</title>
+    <meta name="theme-color" content="#6c5ce7" />
+    <meta
+      name="description"
+      content="Hear from 1,000+ satisfied Dimple users who are earning money by chatting and training AI models"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Header Styles */
+      .header {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 var(--radius) var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        animation: fadeInDown 0.6s ease-out;
+        text-align: center;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: 0;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .header-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      /* Testimonials Section */
+      .testimonials-container {
+        padding: 0 15px;
+        margin-bottom: 100px;
+      }
+
+      .stats-bar {
+        background: white;
+        border-radius: var(--radius);
+        padding: 15px;
+        margin: 0 auto 25px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+        max-width: 500px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stat-number {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .testimonial-card {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        opacity: 0;
+      }
+
+      .testimonial-card::before {
+        content: "";
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 60px;
+            color: rgba(108, 92, 231, 0.1);
+            font-family: serif;
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .testimonial-card::after {
+            content: "
+          "";
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        font-size: 60px;
+        color: rgba(108, 92, 231, 0.1);
+        font-family: serif;
+        line-height: 1;
+        z-index: 0;
+        transform: rotate(180deg);
+      }
+
+      .testimonial-content {
+        position: relative;
+        z-index: 1;
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+        line-height: 1.6;
+      }
+
+      .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .author-avatar {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-light);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .author-info {
+        flex: 1;
+      }
+
+      .author-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .author-location {
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .author-location i {
+        font-size: 10px;
+      }
+
+      .language-tag {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(108, 92, 231, 0.1);
+        color: var(--primary);
+        padding: 3px 8px;
+        border-radius: 50px;
+        font-size: 10px;
+        font-weight: 500;
+        z-index: 2;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        position: fixed;
+        bottom: 70px;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        z-index: 90;
+        animation: fadeInUp 0.6s ease-out 0.8s both;
+      }
+
+      .cta-card {
+        background: var(--bg-gradient);
+        color: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .cta-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .cta-text {
+        font-size: 14px;
+        opacity: 0.9;
+        margin-bottom: 15px;
+      }
+
+      .cta-button {
+        background: white;
+        color: var(--primary);
+        border: none;
+        border-radius: 50px;
+        padding: 12px 25px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: var(--primary);
+      }
+
+      .nav-item:hover {
+        transform: translateY(-3px);
+        color: var(--primary);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (min-width: 768px) {
+        body {
+          max-width: 600px;
+          margin: 0 auto;
+          border-left: 1px solid #eee;
+          border-right: 1px solid #eee;
+        }
+
+        .header {
+          border-radius: 0 0 var(--radius) var(--radius);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header-title {
+          font-size: 20px;
+        }
+
+        .header-subtitle {
+          font-size: 13px;
+        }
+
+        .testimonial-card {
+          padding: 15px;
+        }
+
+        .testimonial-content {
+          font-size: 13px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .header-title {
+          font-size: 18px;
+        }
+
+        .stats-bar {
+          padding: 10px;
+        }
+
+        .stat-number {
+          font-size: 18px;
+        }
+
+        .testimonial-card {
+          padding: 12px;
+        }
+
+        .author-avatar {
+          width: 36px;
+          height: 36px;
+          font-size: 14px;
+        }
+
+        .author-name {
+          font-size: 13px;
+        }
+
+        .cta-title {
+          font-size: 16px;
+        }
+
+        .cta-text {
+          font-size: 13px;
+        }
+
+        .cta-button {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1 class="header-title">User Testimonials</h1>
+        <p class="header-subtitle">Hear from 1,000+ satisfied Dimple users</p>
+      </div>
+    </header>
+
+    <!-- Testimonials Section -->
+    <div class="testimonials-container">
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number" id="totalTestimonials">1,000+</div>
+          <div class="stat-label">Testimonials</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="activeUsers">850K+</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="totalEarnings">₦2.5B+</div>
+          <div class="stat-label">Paid Out</div>
+        </div>
+      </div>
+
+      <div class="testimonials-grid" id="testimonialsGrid">
+        <!-- Testimonials will be generated here -->
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <div class="cta-card">
+        <h3 class="cta-title">Ready to Start Earning?</h3>
+        <p class="cta-text">
+          Join thousands of users making money with Dimple today
+        </p>
+        <button class="cta-button" onclick="window.location.href='auth.html'">
+          <i class="fas fa-user-plus"></i> Sign Up Now
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <!-- <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="ai.html" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="testimonials.html" class="nav-item active">
+        <i class="fas fa-comment-dots"></i>
+        <span>Testimonials</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav> -->
+
+    <script>
+      // Testimonial data in multiple languages
+      const testimonials = {
+        english: [
+          "Dimple has changed my life! I earn ₦15,000 daily just by chatting with people. It's unbelievable!",
+          "I was skeptical at first, but after my first withdrawal of ₦45,000, I became a believer. Thank you Dimple!",
+          "This platform is a game-changer. I make money while making new friends from different countries.",
+          "The best decision I made this year was joining Dimple. The earnings are real and consistent.",
+          "I've tried many online earning apps, but Dimple is by far the most legitimate and rewarding.",
+          "From zero income to ₦300,000 monthly, Dimple has transformed my financial situation completely.",
+          "The support team is amazing! They helped me resolve my withdrawal issue within hours.",
+          "I love how I can earn while lying on my bed. Dimple makes online income so accessible.",
+          "My first month on Dimple and I've already earned ₦75,000. I'm telling all my friends about this!",
+          "The AI training tasks are so interesting and pay really well. I'm hooked on Dimple!",
+        ],
+        pidgin: [
+          "Dimple don change my life! I dey earn ₦15,000 everyday just to dey chat with people. E too sweet!",
+          "At first I no believe am, but when I see my first ₦45,000 for account, my eye clear. Dimple na real deal!",
+          "This platform too good. Money dey enter my account as I dey make new friends from abroad.",
+          "My best decision this year na to join Dimple. The money dey enter anyhow!",
+          "I don try many online apps wey promise money, but Dimple na the realest one wey pay.",
+          "From zero naira to ₦300,000 every month, Dimple don turn me to big boy!",
+          "The customer service too sabi! Dem solve my withdrawal matter for just few hours.",
+          "I love am say I fit dey earn money from my bed. Dimple make online money too easy.",
+          "Just one month for Dimple and I don already earn ₦75,000. I don tell all my people about this thing!",
+          "The AI work sweet die! And the money dey enter well well. Dimple don hook me!",
+        ],
+        igbo: [
+          "Dimple agbanwe ndụ m! Ana m enweta ₦15,000 kwa ụbọchị naanị site na ịkparịta ụka na ndị mmadụ. Ọ bụ ihe ịtụnanya!",
+          "Echere m na ọ bụ ụgha na mbụ, mana mgbe m nwetara ₦45,000 mbụ m, ekwenyesiri m ike. Daalụ Dimple!",
+          "Platform a agbanweela egwuregwu. Ana m enweta ego mgbe m na-eme enyi ọhụrụ si mba dị iche iche.",
+          "Mkpebi kacha mma m mere n'afọ a bụ ịbanye na Dimple. Ego a na-enweta bụ eziokwu na-agbanwe agbanwe.",
+          "Agbalịrị m ọtụtụ ngwa ịnweta ego n'ịntanetị, mana Dimple bụ nke kachasị ezighi ezi ma na-akwụghachi ụgwọ.",
+          "Site na enweghị ego ruo ₦300,000 kwa ọnwa, Dimple agbanweela ọnọdụ ego m kpamkpam.",
+          "Ndị otu nkwado dị ịtụnanya! Ha nyeere m aka dozie nsogbu mwepu m n'ime awa ole na ole.",
+          "Ọ na-amasị m ka m nwere ike ịkpata ego mgbe m dinara n'elu akwa m. Dimple na-eme ka ego ịntanetị dị mfe.",
+          "Ọnwa mbụ m na Dimple ma enwetala m ₦75,000. Ana m agwa ndị enyi m niile banyere nke a!",
+          "Ọrụ ọzụzụ AI na-atọ ụtọ nke ukwuu ma na-akwụ ụgwọ nke ọma. Ama m na Dimple!",
+        ],
+        hausa: [
+          "Dimple ya canza rayuwata! Ina samun ₦15,000 kowace rana kawai ta hira da mutane. Abin mamaki ne!",
+          "Da farko ban yarda, amma bayan na farko na samun ₦45,000, na zama mai aminci. Na gode Dimple!",
+          "Wannan dandali ya canza wasa. Ina samun kudi yayin da nake yin sababbin abokai daga kasashe daban-daban.",
+          "Mafi kyawun shawarar da na yima a wannan shekara shi ne shiga Dimple. Kudin da ake samu gaskiya ne kuma yana ci gaba.",
+          "Na gwada yawancin app ɗin samun kuɗi akan layi, amma Dimple shine mafi inganci da biyan kuɗi.",
+          "Daga sifili zuwa ₦300,000 a kowane wata, Dimple ya canza matsayina na kuɗi gaba ɗaya.",
+          "Ƙungiyar tallafi tana da ban mamaki! Sun taimake ni warware matsalar cire kuɗi a cikin 'yan sa'o'i kawai.",
+          "Ina son yadda zan iya samun kuɗi yayin kwana a kan gadona. Dimple yana sa kuɗin kan layi ya zama mai sauƙi.",
+          "Wata na farko a kan Dimple kuma na riga na sami ₦75,000. Ina gaya wa duk abokaina game da wannan!",
+          "Ayyukan horar da AI suna da daɗi sosai kuma suna biya da kyau. Na makale da Dimple!",
+        ],
+        yoruba: [
+          "Dimple ti yi mi pada! Mo n gba ₦15,000 lojojumọ nikan nipa sisọrọ pẹlu awọn eniyan. O jẹ ohun iyanu!",
+          "Ni akọkọ mo dabi eniti ko gbẹkẹle, ṣugbọn lẹhin igba akọkọ mi ti ₦45,000, mo di onigbagbọ. O ṣeun Dimple!",
+          "Ọna yii yipada ere. Mo n ṣe owo nigba ti mo n ṣe awọn ọrẹ tuntun lati orilẹ-ede otooto.",
+          "Ipinnu ti o dara julọ ti mo ṣe ni ọdun yii ni lilọ si Dimple. Owo ti a n gba jẹ otitọ ati itẹsiwaju.",
+          "Mo ti gbiyanju ọpọlọpọ awọn ohun elo owo ori ayelujara, ṣugbọn Dimple jẹ ohun ti o tọ julọ ati isanwo.",
+          "Lati owo-ori sipo si ₦300,000 osu kọọkan, Dimple ti yi ipo owo mi pada patapata.",
+          "Ẹgbẹ atilẹyin naa dara pupọ! Wọn ṣe iranlọwọ fun mi lati yanju iṣoro igbeowo mi laarin awọn wakati diẹ.",
+          "Mo nifẹ bawo ni mo ṣe le ṣe owo nigba ti mo n sun lori ibusun mi. Dimple ṣe owo ori ayelujara rọrun.",
+          "Oṣu akọkọ mi lori Dimple ati pe mo ti gba ₦75,000. Mo n sọ fun gbogbo awọn ọrẹ mi nipa eyi!",
+          "Awọn iṣẹ ikẹkọ AI dara pupọ! Wọn si san owo daradara. Mo ti wa ni hooked lori Dimple!",
+        ],
+      };
+
+      // Names and locations
+      const firstNames = [
+        "Ade",
+        "Chioma",
+        "Mohammed",
+        "Blessing",
+        "Emeka",
+        "Fatima",
+        "Olu",
+        "Amina",
+        "Ibrahim",
+        "Grace",
+        "Kemi",
+        "Yusuf",
+        "Ngozi",
+        "Samuel",
+        "Aisha",
+      ];
+      const lastNames = [
+        "Okafor",
+        "Mohammed",
+        "Eze",
+        "Ibrahim",
+        "Ogunlesi",
+        "Bello",
+        "Okonkwo",
+        "Adeleke",
+        "Chukwu",
+        "Yakubu",
+        "Ojo",
+        "Musa",
+        "Nwachukwu",
+        "Sani",
+        "Okafor",
+      ];
+      const locations = [
+        "Lagos",
+        "Abuja",
+        "Kano",
+        "Port Harcourt",
+        "Ibadan",
+        "Enugu",
+        "Kaduna",
+        "Benin",
+        "Warri",
+        "Calabar",
+        "Uyo",
+        "Abeokuta",
+        "Onitsha",
+        "Maiduguri",
+        "Sokoto",
+      ];
+      const countries = [
+        "Nigeria",
+        "Ghana",
+        "Kenya",
+        "South Africa",
+        "Uganda",
+        "Tanzania",
+        "Rwanda",
+        "Senegal",
+        "Cameroon",
+        "Ivory Coast",
+      ];
+
+      // Generate random testimonials
+      function generateTestimonials(count) {
+        const testimonialsGrid = document.getElementById("testimonialsGrid");
+        testimonialsGrid.innerHTML = "";
+
+        const languages = Object.keys(testimonials);
+
+        for (let i = 0; i < count; i++) {
+          const language =
+            languages[Math.floor(Math.random() * languages.length)];
+          const testimonialText =
+            testimonials[language][
+              Math.floor(Math.random() * testimonials[language].length)
+            ];
+          const firstName =
+            firstNames[Math.floor(Math.random() * firstNames.length)];
+          const lastName =
+            lastNames[Math.floor(Math.random() * lastNames.length)];
+          const location =
+            locations[Math.floor(Math.random() * locations.length)];
+          const country =
+            countries[Math.floor(Math.random() * countries.length)];
+
+          const card = document.createElement("div");
+          card.className =
+            "testimonial-card animate__animated animate__fadeInUp";
+          card.style.animationDelay = `${i * 0.1}s`;
+
+          card.innerHTML = `
+                    <span class="language-tag">${language.toUpperCase()}</span>
+                    <p class="testimonial-content">${testimonialText}</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">${firstName.charAt(
+                          0
+                        )}${lastName.charAt(0)}</div>
+                        <div class="author-info">
+                            <div class="author-name">${firstName} ${lastName}</div>
+                            <div class="author-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${location}, ${country}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+          testimonialsGrid.appendChild(card);
+        }
+
+        // Animate stats
+        animateStats();
+      }
+
+      // Animate stats numbers
+      function animateStats() {
+        const stats = [
+          {
+            element: document.getElementById("totalTestimonials"),
+            target: 1037,
+            duration: 2000,
+          },
+          {
+            element: document.getElementById("activeUsers"),
+            target: 856000,
+            duration: 2000,
+          },
+          {
+            element: document.getElementById("totalEarnings"),
+            target: 2530000000,
+            duration: 2000,
+          },
+        ];
+
+        stats.forEach((stat) => {
+          const start = 0;
+          const increment = stat.target / (stat.duration / 16);
+          let current = start;
+
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= stat.target) {
+              clearInterval(timer);
+              current = stat.target;
+            }
+
+            if (stat.element.id === "totalEarnings") {
+              stat.element.textContent = `₦${Math.floor(
+                current
+              ).toLocaleString()}+`;
+            } else {
+              stat.element.textContent = `${Math.floor(
+                current
+              ).toLocaleString()}+`;
+            }
+          }, 16);
+        });
+      }
+
+      // Rotate testimonials every 10 seconds
+      function rotateTestimonials() {
+        setInterval(() => {
+          generateTestimonials(10);
+        }, 10000000);
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        generateTestimonials(10);
+        rotateTestimonials();
+
+        // Add intersection observer for scroll animations
+        const testimonialCards = document.querySelectorAll(".testimonial-card");
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.style.opacity = "1";
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        testimonialCards.forEach((card) => {
+          observer.observe(card);
+        });
+      });
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>
