@@ -1,1 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Dimple</title>
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --accent: #fd79a8;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Header Styles */
+      .header {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 var(--radius) var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        animation: fadeInDown 0.6s ease-out;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: 0;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .header-title {
+        font-size: 18px;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .admin-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* Stats Overview */
+      .stats-overview {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 0 20px;
+        margin-bottom: 20px;
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(108, 92, 231, 0.15);
+      }
+
+      .stat-title {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .stat-change {
+        font-size: 10px;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+
+      .stat-change.positive {
+        color: var(--success);
+      }
+
+      .stat-change.negative {
+        color: var(--error);
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        margin: 0 20px 20px;
+        overflow-x: auto;
+        scrollbar-width: none; /* Firefox */
+      }
+
+      .tabs::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
+
+      .tab {
+        padding: 10px 15px;
+        cursor: pointer;
+        position: relative;
+        font-weight: 500;
+        color: #666;
+        white-space: nowrap;
+      }
+
+      .tab.active {
+        color: var(--primary);
+      }
+
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 3px 3px 0 0;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      /* Chat Management */
+      .chat-management {
+        padding: 0 20px;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title i {
+        color: var(--primary);
+      }
+
+      .user-chat-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: var(--radius-sm);
+        background: white;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .user-chat-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .user-chat-item:last-child {
+        border-bottom: none;
+      }
+
+      .user-chat-item:hover {
+        background: #f9f9f9;
+      }
+
+      .user-chat-item.active {
+        background: rgba(108, 92, 231, 0.1);
+        border-left: 3px solid var(--primary);
+      }
+
+      .user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--light);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-info {
+        flex: 1;
+      }
+
+      .user-name {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .user-status {
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      .unread-count {
+        background: var(--primary);
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        font-weight: 600;
+      }
+
+      /* Chat Container */
+      .chat-container {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin: 0 20px 20px;
+        height: 50vh;
+        max-height: 500px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        z-index: 1;
+      }
+
+      .chat-header-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .chat-header-info {
+        flex: 1;
+      }
+
+      .chat-header-name {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .chat-header-status {
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #f9f9f9;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .message-incoming {
+        align-items: flex-start;
+      }
+
+      .message-outgoing {
+        align-items: flex-end;
+      }
+
+      .message-bubble {
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        position: relative;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .message-incoming .message-bubble {
+        background: white;
+        color: var(--text);
+        border: 1px solid #eee;
+        border-top-left-radius: 0;
+      }
+
+      .message-outgoing .message-bubble {
+        background: var(--primary);
+        color: white;
+        border-top-right-radius: 0;
+      }
+
+      .message-time {
+        font-size: 11px;
+        color: #999;
+        margin-top: 5px;
+      }
+
+      .chat-input-container {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        background: white;
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        transition: var(--transition);
+      }
+
+      .chat-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .send-button {
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--primary);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .send-button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .send-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Foreign User Selector */
+      .foreign-user-selector {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        scrollbar-width: none; /* Firefox */
+      }
+
+      .foreign-user-selector::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
+
+      .foreign-user-option {
+        min-width: 80px;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      .foreign-user-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #eee;
+        transition: var(--transition);
+        margin: 0 auto 5px;
+      }
+
+      .foreign-user-option.active .foreign-user-avatar {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .foreign-user-name {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Card Approvals */
+      .card-approvals {
+        padding: 0 20px;
+        margin-bottom: 20px;
+      }
+
+      .approval-list {
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: var(--radius-sm);
+        background: white;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .approval-item {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        transition: var(--transition);
+      }
+
+      .approval-item:last-child {
+        border-bottom: none;
+      }
+
+      .approval-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .approval-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .approval-user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .approval-user-name {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .approval-amount {
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .approval-details {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .approval-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .approval-btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .approve-btn {
+        background: rgba(0, 184, 148, 0.1);
+        color: var(--success);
+      }
+
+      .approve-btn:hover {
+        background: var(--success);
+        color: white;
+      }
+
+      .decline-btn {
+        background: rgba(214, 48, 49, 0.1);
+        color: var(--error);
+      }
+
+      .decline-btn:hover {
+        background: var(--error);
+        color: white;
+      }
+
+      /* Empty State */
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+        padding: 20px;
+        text-align: center;
+        background: white;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .empty-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--light);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+        color: var(--primary);
+        font-size: 24px;
+      }
+
+      .empty-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .empty-text {
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* Toast Notification */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.error {
+        background: var(--error);
+      }
+
+      .toast.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: var(--primary);
+      }
+
+      .nav-item:hover {
+        transform: translateY(-3px);
+        color: var(--primary);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .stats-overview {
+          grid-template-columns: 1fr;
+        }
+
+        .chat-container {
+          height: 40vh;
+        }
+
+        .user-chat-list,
+        .approval-list {
+          max-height: 200px;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .header-title {
+          font-size: 16px;
+        }
+
+        .admin-avatar {
+          width: 35px;
+          height: 35px;
+          font-size: 16px;
+        }
+
+        .stat-value {
+          font-size: 18px;
+        }
+
+        .user-avatar,
+        .foreign-user-avatar {
+          width: 45px;
+          height: 45px;
+        }
+
+        .message-bubble {
+          max-width: 90%;
+          padding: 8px 12px;
+          font-size: 13px;
+        }
+
+        .chat-input {
+          padding: 10px 12px;
+          font-size: 13px;
+        }
+
+        .send-button {
+          width: 45px;
+          height: 45px;
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-title">Admin Dashboard</div>
+        <div class="admin-info">
+          <div class="admin-avatar">
+            <i class="fas fa-user-shield"></i>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview">
+      <div
+        class="stat-card animate__animated animate__fadeIn animate__delay-1s"
+      >
+        <div class="stat-title">Active Users</div>
+        <div class="stat-value" id="activeUsers">0</div>
+        <div class="stat-change positive">
+          <i class="fas fa-arrow-up"></i> 12% from last week
+        </div>
+      </div>
+      <div
+        class="stat-card animate__animated animate__fadeIn animate__delay-1s"
+      >
+        <div class="stat-title">Total Earnings</div>
+        <div class="stat-value" id="totalEarnings">₦0</div>
+        <div class="stat-change positive">
+          <i class="fas fa-arrow-up"></i> 8% from last week
+        </div>
+      </div>
+      <div
+        class="stat-card animate__animated animate__fadeIn animate__delay-2s"
+      >
+        <div class="stat-title">Pending Approvals</div>
+        <div class="stat-value" id="pendingApprovals">0</div>
+        <div class="stat-change negative">
+          <i class="fas fa-arrow-down"></i> 3 from yesterday
+        </div>
+      </div>
+      <div
+        class="stat-card animate__animated animate__fadeIn animate__delay-2s"
+      >
+        <div class="stat-title">Active Chats</div>
+        <div class="stat-value" id="activeChats">0</div>
+        <div class="stat-change positive">
+          <i class="fas fa-arrow-up"></i> 5 from yesterday
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" data-tab="chats">Chat Management</div>
+      <div class="tab" data-tab="approvals">Card Approvals</div>
+    </div>
+
+    <!-- Chat Management Tab -->
+    <div class="tab-content active" id="chatsTab">
+      <div class="chat-management">
+        <h2 class="section-title">
+          <i class="fas fa-comments"></i>
+          <span>Active User Chats</span>
+        </h2>
+
+        <div class="user-chat-list" id="userChatList">
+          <!-- User chat items will be loaded here -->
+        </div>
+
+        <h2 class="section-title" style="margin-top: 20px">
+          <i class="fas fa-user-tie"></i>
+          <span>Select Foreign User Profile</span>
+        </h2>
+
+        <div class="foreign-user-selector" id="foreignUserSelector">
+          <!-- Foreign user options will be loaded here -->
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+          <div class="chat-header">
+            <img
+              src=""
+              alt="User"
+              class="chat-header-avatar"
+              id="chatHeaderAvatar"
+            />
+            <div class="chat-header-info">
+              <div class="chat-header-name" id="chatHeaderName">
+                Select a chat
+              </div>
+              <div class="chat-header-status">
+                <span class="status-dot"></span>
+                <span id="chatHeaderStatus">Active</span>
+              </div>
+            </div>
+          </div>
+          <div class="chat-messages" id="chatMessages">
+            <div class="empty-state">
+              <div class="empty-icon">
+                <i class="fas fa-comments"></i>
+              </div>
+              <h3 class="empty-title">No Chat Selected</h3>
+              <p class="empty-text">
+                Select a user chat from the list above to view and respond to
+                messages.
+              </p>
+            </div>
+          </div>
+          <div
+            class="chat-input-container"
+            id="chatInputContainer"
+            style="display: none"
+          >
+            <input
+              type="text"
+              class="chat-input"
+              id="messageInput"
+              placeholder="Type your message..."
+            />
+            <button class="send-button" id="sendButton">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <!-- Card Approvals Tab -->
+    <div class="tab-content" id="approvalsTab">
+      <div class="card-approvals">
+        <h2 class="section-title">
+          <i class="fas fa-credit-card"></i>
+          <span>Pending Card Approvals</span>
+        </h2>
+
+        <div class="approval-list" id="approvalList">
+          <!-- Approval items will be loaded here -->
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item active">
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="earn.html" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earnings</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+      <a href="https://t.me/memorymat" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>Group</span>
+      </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage">Operation successful!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const activeUsers = document.getElementById("activeUsers");
+      const totalEarnings = document.getElementById("totalEarnings");
+      const pendingApprovals = document.getElementById("pendingApprovals");
+      const activeChats = document.getElementById("activeChats");
+      const userChatList = document.getElementById("userChatList");
+      const foreignUserSelector = document.getElementById(
+        "foreignUserSelector"
+      );
+      const chatContainer = document.getElementById("chatContainer");
+      const chatMessages = document.getElementById("chatMessages");
+      const chatHeaderAvatar = document.getElementById("chatHeaderAvatar");
+      const chatHeaderName = document.getElementById("chatHeaderName");
+      const chatHeaderStatus = document.getElementById("chatHeaderStatus");
+      const messageInput = document.getElementById("messageInput");
+      const sendButton = document.getElementById("sendButton");
+      const chatInputContainer = document.getElementById("chatInputContainer");
+      const approvalList = document.getElementById("approvalList");
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+      const tabs = document.querySelectorAll(".tab");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      // Current chat state
+      let currentChat = {
+        userId: null,
+        userName: null,
+        userAvatar: null,
+        userStatus: null,
+        foreignUserId: null,
+        foreignUserName: null,
+        foreignUserAvatar: null,
+      };
+
+      // Foreign users data (same as in earn.html)
+      const foreignUsers = [
+        {
+          id: "user1",
+          name: "Martin Clark",
+          avatar:
+            "https://tse2.mm.bing.net/th/id/OIP.ooXZBEfKiLvo4odowmS-CwHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+        {
+          id: "user2",
+          name: "Betrice Gabilone",
+          avatar:
+            "https://tse4.mm.bing.net/th/id/OIP.5Qh74bEoWHohq2j0LSwxBgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+        {
+          id: "user3",
+          name: "Annastecia Flakes",
+          avatar:
+            "https://tse4.mm.bing.net/th/id/OIP.ThFpfP_-WnBWqRwXIvCrcgHaLH?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+        {
+          id: "user4",
+          name: "Mira Sorvino",
+          avatar:
+            "https://th.bing.com/th/id/R.709a3081b2159c45dd79b21d72207878?rik=hSKr8PFGrFgczA&pid=ImgRaw&r=0",
+          status: "active",
+        },
+        {
+          id: "user5",
+          name: "Luke Amstrong",
+          avatar:
+            "https://tse2.mm.bing.net/th/id/OIP.b13NUiFnJGRv-ucAAxDd4AHaEL?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+      ];
+
+      // Format currency
+      function formatCurrency(amount) {
+        return (
+          "₦" +
+          parseFloat(amount).toLocaleString("en-NG", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        );
+      }
+
+      // Show toast notification
+      function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError ? "toast error show" : "toast show";
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Tab switching
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          // Remove active class from all tabs and contents
+          tabs.forEach((t) => t.classList.remove("active"));
+          tabContents.forEach((c) => c.classList.remove("active"));
+
+          // Add active class to clicked tab and corresponding content
+          tab.classList.add("active");
+          const tabId = tab.getAttribute("data-tab") + "Tab";
+          document.getElementById(tabId).classList.add("active");
+        });
+      });
+
+      // Load foreign users for selection
+      function loadForeignUsers() {
+        foreignUserSelector.innerHTML = "";
+        foreignUsers.forEach((user) => {
+          const userOption = document.createElement("div");
+          userOption.className = "foreign-user-option";
+          userOption.innerHTML = `
+            <img src="${user.avatar}" alt="${user.name}" class="foreign-user-avatar" />
+            <div class="foreign-user-name">${user.name}</div>
+          `;
+          userOption.addEventListener("click", () => selectForeignUser(user));
+          foreignUserSelector.appendChild(userOption);
+        });
+      }
+
+      // Select foreign user to respond as
+      function selectForeignUser(user) {
+        currentChat.foreignUserId = user.id;
+        currentChat.foreignUserName = user.name;
+        currentChat.foreignUserAvatar = user.avatar;
+
+        // Update UI
+        document.querySelectorAll(".foreign-user-option").forEach((el) => {
+          el.classList.remove("active");
+        });
+        event.currentTarget.classList.add("active");
+
+        // Enable chat input if we have both users selected
+        if (currentChat.userId) {
+          chatInputContainer.style.display = "flex";
+        }
+
+        showToast(`Now responding as ${user.name}`);
+      }
+
+      // Load user chats
+      function loadUserChats() {
+        // Listen for new chats being created
+        database.ref("dimplemssg").on("value", (snapshot) => {
+          const chats = snapshot.val();
+          userChatList.innerHTML = "";
+
+          if (chats) {
+            // Convert to array and sort by most recent activity
+            const chatArray = Object.entries(chats).map(([id, messages]) => {
+              // Get the last message timestamp
+              const lastMessage = messages[Object.keys(messages).pop()];
+              return {
+                id,
+                userId: id.split("_")[0],
+                foreignUserId: id.split("_")[1],
+                lastMessage: lastMessage.text,
+                lastMessageTime: lastMessage.timestamp,
+                unread: 0, // Admin can't have unread messages
+              };
+            });
+
+            // Sort by last message time (newest first)
+            chatArray.sort((a, b) => b.lastMessageTime - a.lastMessageTime);
+
+            // Display chats
+            chatArray.forEach((chat) => {
+              // Get user info from users table
+              database
+                .ref(`users/${chat.userId}`)
+                .once("value")
+                .then((userSnapshot) => {
+                  const userData = userSnapshot.val();
+                  if (userData) {
+                    const chatItem = document.createElement("div");
+                    chatItem.className = `user-chat-item ${
+                      currentChat.userId === chat.userId ? "active" : ""
+                    }`;
+                    chatItem.innerHTML = `
+                      <img src="${
+                        userData.imageUrl ||
+                        "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='35' fill='%236c5ce7'/%3E%3Ccircle cx='50' cy='100' r='50' fill='%23a29bfe'/%3E%3C/svg%3E"
+                      }" alt="${userData.fullName}" class="user-avatar" />
+                      <div class="user-info">
+                        <div class="user-name">${userData.fullName}</div>
+                        <div class="user-status">
+                          <span class="status-dot"></span>
+                          <span>Active</span>
+                        </div>
+                      </div>
+                      ${
+                        chat.unread > 0
+                          ? `<div class="unread-count">${chat.unread}</div>`
+                          : ""
+                      }
+                    `;
+                    chatItem.addEventListener("click", () =>
+                      openChat(chat.userId, userData)
+                    );
+                    userChatList.appendChild(chatItem);
+                  }
+                });
+            });
+
+            // Update active chats count
+            activeChats.textContent = chatArray.length;
+          } else {
+            // No chats yet
+            userChatList.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="empty-title">No Active Chats</h3>
+                <p class="empty-text">When users start chatting, they'll appear here.</p>
+              </div>
+            `;
+            activeChats.textContent = "0";
+          }
+        });
+      }
+
+      // Open chat with a user
+      function openChat(userId, userData) {
+        currentChat.userId = userId;
+        currentChat.userName = userData.fullName;
+        currentChat.userAvatar =
+          userData.imageUrl ||
+          "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='35' fill='%236c5ce7'/%3E%3Ccircle cx='50' cy='100' r='50' fill='%23a29bfe'/%3E%3C/svg%3E";
+        currentChat.userStatus = "active";
+
+        // Update UI
+        document.querySelectorAll(".user-chat-item").forEach((el) => {
+          el.classList.remove("active");
+        });
+        event.currentTarget.classList.add("active");
+
+        chatHeaderAvatar.src = currentChat.userAvatar;
+        chatHeaderName.textContent = currentChat.userName;
+        chatHeaderStatus.textContent = "Active";
+
+        // Show chat input if we have both users selected
+        if (currentChat.foreignUserId) {
+          chatInputContainer.style.display = "flex";
+        }
+
+        // Load messages
+        loadMessages(userId, currentChat.foreignUserId);
+      }
+
+      // Load messages for a chat
+      function loadMessages(userId, foreignUserId) {
+        if (!userId || !foreignUserId) return;
+
+        const chatId = `${userId}_${foreignUserId}`;
+        chatMessages.innerHTML = "";
+
+        database
+          .ref(`dimplemssg/${chatId}`)
+          .orderByChild("timestamp")
+          .on("value", (snapshot) => {
+            const messages = snapshot.val();
+            chatMessages.innerHTML = "";
+
+            if (messages) {
+              // Convert to array and sort by timestamp
+              const messagesArray = Object.values(messages).sort(
+                (a, b) => a.timestamp - b.timestamp
+              );
+
+              // Display messages
+              messagesArray.forEach((message) => {
+                addMessageToChat(
+                  message.text,
+                  message.sender === "user",
+                  new Date(message.timestamp)
+                );
+              });
+
+              // Scroll to bottom
+              setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+              }, 100);
+            } else {
+              chatMessages.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-icon">
+                    <i class="fas fa-comments"></i>
+                  </div>
+                  <h3 class="empty-title">No Messages Yet</h3>
+                  <p class="empty-text">Start the conversation with this user.</p>
+                </div>
+              `;
+            }
+          });
+      }
+
+      // Add message to chat UI
+      function addMessageToChat(text, isIncoming, timestamp) {
+        // Remove empty state if it exists
+        const emptyState = document.querySelector(".empty-state");
+        if (emptyState) emptyState.remove();
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${
+          isIncoming ? "message-incoming" : "message-outgoing"
+        }`;
+
+        const timeString = timestamp.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        messageDiv.innerHTML = `
+          <div class="message-bubble">${text}</div>
+          <div class="message-time">${timeString}</div>
+        `;
+
+        chatMessages.appendChild(messageDiv);
+
+        // Scroll to bottom
+        setTimeout(() => {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 100);
+      }
+
+      // Send message as admin
+      function sendMessage() {
+        const messageText = messageInput.value.trim();
+
+        if (
+          messageText === "" ||
+          !currentChat.userId ||
+          !currentChat.foreignUserId
+        ) {
+          return;
+        }
+
+        // Create message object
+        const message = {
+          text: messageText,
+          sender: "admin",
+          timestamp: Date.now(),
+        };
+
+        // Save message to Firebase
+        database
+          .ref(`dimplemssg/${currentChat.userId}_${currentChat.foreignUserId}`)
+          .push(message)
+          .then(() => {
+            // Clear input
+            messageInput.value = "";
+          })
+          .catch((error) => {
+            console.error("Error sending message:", error);
+            showToast("Error sending message", true);
+          });
+      }
+
+      // Load pending card approvals
+      function loadPendingApprovals() {
+        database
+          .ref("cardOrders")
+          .orderByChild("status")
+          .equalTo("pending")
+          .on("value", (snapshot) => {
+            const approvals = snapshot.val();
+            approvalList.innerHTML = "";
+
+            if (approvals) {
+              // Convert to array and sort by date (newest first)
+              const approvalsArray = Object.entries(approvals).map(
+                ([id, data]) => ({
+                  id,
+                  ...data,
+                })
+              );
+              approvalsArray.sort((a, b) => b.createdAt - a.createdAt);
+
+              // Update pending approvals count
+              pendingApprovals.textContent = approvalsArray.length;
+
+              // Display approvals
+              approvalsArray.forEach((approval) => {
+                // Get user info
+                database
+                  .ref(`users/${approval.userId}`)
+                  .once("value")
+                  .then((userSnapshot) => {
+                    const userData = userSnapshot.val();
+                    if (userData) {
+                      const approvalItem = document.createElement("div");
+                      approvalItem.className = "approval-item";
+                      approvalItem.innerHTML = `
+                        <div class="approval-header">
+                          <div class="approval-user">
+                            <img src="${
+                              userData.imageUrl ||
+                              "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='35' fill='%236c5ce7'/%3E%3Ccircle cx='50' cy='100' r='50' fill='%23a29bfe'/%3E%3C/svg%3E"
+                            }" alt="${
+                        userData.fullName
+                      }" class="approval-user-avatar" />
+                            <div class="approval-user-name">${
+                              userData.fullName
+                            }</div>
+                          </div>
+                          <div class="approval-amount">${formatCurrency(
+                            approval.amount
+                          )}</div>
+                        </div>
+                        <div class="approval-details">
+                          <div><strong>Card Type:</strong> ${
+                            approval.cardType === "virtual"
+                              ? "Virtual"
+                              : "Physical"
+                          }</div>
+                          <div><strong>Order Date:</strong> ${new Date(
+                            approval.createdAt
+                          ).toLocaleDateString()}</div>
+                          ${
+                            approval.cardType === "physical"
+                              ? `<div><strong>Delivery Address:</strong> ${approval.address}</div>`
+                              : ""
+                          }
+                        </div>
+                        <div class="approval-actions">
+                          <button class="approval-btn decline-btn" data-id="${
+                            approval.id
+                          }" data-userid="${approval.userId}">
+                            <i class="fas fa-times"></i>
+                            Decline
+                          </button>
+                          <button class="approval-btn approve-btn" data-id="${
+                            approval.id
+                          }" data-userid="${approval.userId}">
+                            <i class="fas fa-check"></i>
+                            Approve
+                          </button>
+                        </div>
+                      `;
+                      approvalList.appendChild(approvalItem);
+                    }
+                  });
+              });
+            } else {
+              // No pending approvals
+              approvalList.innerHTML = `
+                <div class="empty-state">
+                  <div class="empty-icon">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <h3 class="empty-title">No Pending Approvals</h3>
+                  <p class="empty-text">All card orders have been processed.</p>
+                </div>
+              `;
+              pendingApprovals.textContent = "0";
+            }
+          });
+
+        // Set up approval button handlers
+        document.querySelectorAll(".approve-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const orderId = e.currentTarget.getAttribute("data-id");
+            const userId = e.currentTarget.getAttribute("data-userid");
+            approveCardOrder(orderId, userId);
+          });
+        });
+
+        document.querySelectorAll(".decline-btn").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            const orderId = e.currentTarget.getAttribute("data-id");
+            const userId = e.currentTarget.getAttribute("data-userid");
+            declineCardOrder(orderId, userId);
+          });
+        });
+      }
+
+      // Approve card order
+      function approveCardOrder(orderId, userId) {
+        // Update order status
+        database.ref(`cardOrders/${orderId}`).update({
+          status: "approved",
+          processedAt: firebase.database.ServerValue.TIMESTAMP,
+        });
+
+        // If virtual card, update user's card info
+        database
+          .ref(`cardOrders/${orderId}`)
+          .once("value")
+          .then((snapshot) => {
+            const orderData = snapshot.val();
+            if (orderData.cardType === "virtual" && orderData.cardDetails) {
+              database.ref(`users/${userId}/card`).set({
+                number: orderData.cardDetails.number.replace(/\s/g, ""),
+                expiry: orderData.cardDetails.expiry,
+                cvv: orderData.cardDetails.cvv,
+                type: "virtual",
+                status: "approved",
+                orderId: orderId,
+              });
+            } else if (orderData.cardType === "physical") {
+              // For physical cards, just mark as approved
+              database.ref(`users/${userId}/card`).set({
+                type: "physical",
+                status: "approved",
+                orderId: orderId,
+              });
+            }
+          });
+
+        showToast("Card order approved successfully!");
+      }
+
+      // Decline card order
+      function declineCardOrder(orderId, userId) {
+        // Update order status
+        database.ref(`cardOrders/${orderId}`).update({
+          status: "declined",
+          processedAt: firebase.database.ServerValue.TIMESTAMP,
+        });
+
+        // Remove any card data for this user
+        database.ref(`users/${userId}/card`).remove();
+
+        showToast("Card order declined.");
+      }
+
+      // Load dashboard stats
+      function loadDashboardStats() {
+        // Total active users
+        database
+          .ref("users")
+          .once("value")
+          .then((snapshot) => {
+            const users = snapshot.val();
+            activeUsers.textContent = users ? Object.keys(users).length : "0";
+          });
+
+        // Total earnings (sum of all users' totalEarnings)
+        database
+          .ref("users")
+          .once("value")
+          .then((snapshot) => {
+            const users = snapshot.val();
+            let total = 0;
+            if (users) {
+              Object.values(users).forEach((user) => {
+                total += user.totalEarnings || 0;
+              });
+            }
+            totalEarnings.textContent = formatCurrency(total);
+          });
+      }
+
+      // Event listeners
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && messageInput.value.trim() !== "") {
+          sendMessage();
+        }
+      });
+
+      sendButton.addEventListener("click", sendMessage);
+
+      // Initialize
+      loadForeignUsers();
+      loadUserChats();
+      loadPendingApprovals();
+      loadDashboardStats();
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>
 
