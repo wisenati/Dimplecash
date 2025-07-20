@@ -985,12 +985,12 @@
             currentChat.foreignUserId === user.id ? "active" : ""
           }`;
           userCard.innerHTML = `
-        <img src="${user.avatar}" alt="${user.name}" class="user-avatar" />
-        <div class="user-name">${user.name}</div>
-        <div class="user-status ${
-          user.status === "active" ? "status-active" : "status-inactive"
-        }">${user.status === "active" ? "Active" : "Inactive"}</div>
-      `;
+      <img src="${user.avatar}" alt="${user.name}" class="user-avatar" />
+      <div class="user-name">${user.name}</div>
+      <div class="user-status ${
+        user.status === "active" ? "status-active" : "status-inactive"
+      }">${user.status === "active" ? "Active" : "Inactive"}</div>
+    `;
           userCard.addEventListener("click", () => startChat(user));
           foreignUsersGrid.appendChild(userCard);
         });
@@ -1181,9 +1181,9 @@
         });
 
         messageDiv.innerHTML = `
-      <div class="message-bubble">${text}</div>
-      <div class="message-time">${timeString}</div>
-    `;
+    <div class="message-bubble">${text}</div>
+    <div class="message-time">${timeString}</div>
+  `;
 
         chatMessages.appendChild(messageDiv);
 
@@ -1221,32 +1221,6 @@
           .then(() => {
             // Clear input
             messageInput.value = "";
-
-            // Simulate admin reply after 2-5 seconds
-            setTimeout(() => {
-              const replies = [
-                "That's interesting! Tell me more.",
-                "I appreciate your message!",
-                "Thanks for chatting with me.",
-                "How has your day been?",
-                "I'm enjoying our conversation!",
-                "What else would you like to talk about?",
-                "That's a great point!",
-                "I'd love to hear more about that.",
-              ];
-              const randomReply =
-                replies[Math.floor(Math.random() * replies.length)];
-
-              const adminMessage = {
-                text: randomReply,
-                sender: "admin",
-                timestamp: Date.now(),
-              };
-
-              database
-                .ref(`dimplemssg/${userId}_${currentChat.foreignUserId}`)
-                .push(adminMessage);
-            }, Math.random() * 3000 + 2000);
           })
           .catch((error) => {
             console.error("Error sending message:", error);
