@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Chat | Dimple</title>
+    <meta name="theme-color" content="#6c5ce7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c5ce7;
+        --primary-dark: #5649c0;
+        --primary-light: #a29bfe;
+        --secondary: #00cec9;
+        --accent: #fd79a8;
+        --text: #2d3436;
+        --light: #f5f6fa;
+        --error: #d63031;
+        --success: #00b894;
+        --warning: #fdcb6e;
+        --bg-gradient: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+        --shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+        --shadow-sm: 0 4px 15px rgba(108, 92, 231, 0.15);
+        --radius: 16px;
+        --radius-sm: 8px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: var(--light);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Admin Header */
+      .admin-header {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 var(--radius) var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+        animation: fadeInDown 0.6s ease-out;
+      }
+
+      .admin-header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 70%
+        );
+        transform: rotate(30deg);
+        z-index: 0;
+      }
+
+      .admin-header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .admin-header-title {
+        font-size: 18px;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .admin-mode-badge {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        padding: 8px 15px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Profile Selection */
+      .profile-selection {
+        padding: 0 20px;
+        margin-bottom: 20px;
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+      }
+
+      .section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .section-title i {
+        color: var(--primary);
+      }
+
+      .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+      }
+
+      .profile-card {
+        background: white;
+        border-radius: var(--radius-sm);
+        padding: 15px;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(108, 92, 231, 0.15);
+      }
+
+      .profile-card.active {
+        border: 2px solid var(--primary);
+        background: rgba(108, 92, 231, 0.05);
+      }
+
+      .profile-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 10px;
+        border: 3px solid var(--light);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .profile-name {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+
+      .profile-status {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 50px;
+        display: inline-block;
+      }
+
+      .status-active {
+        background: rgba(0, 184, 148, 0.1);
+        color: var(--success);
+      }
+
+      .status-inactive {
+        background: rgba(214, 48, 49, 0.1);
+        color: var(--error);
+      }
+
+      /* User Selection */
+      .user-selection {
+        padding: 0 20px;
+        margin-bottom: 20px;
+        animation: fadeInUp 0.6s ease-out 0.4s both;
+      }
+
+      .user-list {
+        background: white;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-sm);
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .user-item {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .user-item:last-child {
+        border-bottom: none;
+      }
+
+      .user-item:hover {
+        background: rgba(108, 92, 231, 0.05);
+      }
+
+      .user-item.active {
+        background: rgba(108, 92, 231, 0.1);
+      }
+
+      .user-item-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .user-item-info {
+        flex: 1;
+      }
+
+      .user-item-name {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .user-item-last-message {
+        font-size: 12px;
+        color: #666;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .user-item-time {
+        font-size: 11px;
+        color: #999;
+      }
+
+      .user-item-unread {
+        background: var(--primary);
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 600;
+      }
+
+      /* Chat Container */
+      .chat-container {
+        background: white;
+        border-radius: var(--radius) var(--radius) 0 0;
+        box-shadow: var(--shadow);
+        margin: 0 20px;
+        height: 55vh;
+        max-height: 500px;
+        display: flex;
+        flex-direction: column;
+        animation: fadeInUp 0.6s ease-out 0.6s both;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        z-index: 1;
+      }
+
+      .chat-header-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .chat-header-info {
+        flex: 1;
+      }
+
+      .chat-header-name {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .chat-header-status {
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--success);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #f9f9f9;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .message-incoming {
+        align-items: flex-start;
+      }
+
+      .message-outgoing {
+        align-items: flex-end;
+      }
+
+      .message-bubble {
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        position: relative;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .message-incoming .message-bubble {
+        background: white;
+        color: var(--text);
+        border: 1px solid #eee;
+        border-top-left-radius: 0;
+      }
+
+      .message-outgoing .message-bubble {
+        background: var(--primary);
+        color: white;
+        border-top-right-radius: 0;
+      }
+
+      .message-time {
+        font-size: 11px;
+        color: #999;
+        margin-top: 5px;
+      }
+
+      .message-actions {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: white;
+        border-radius: 50px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        overflow: hidden;
+        z-index: 2;
+      }
+
+      .message:hover .message-actions {
+        display: flex;
+      }
+
+      .message-action {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .message-action:hover {
+        background: #f5f5f5;
+        color: var(--primary);
+      }
+
+      .message-action.delete:hover {
+        color: var(--error);
+      }
+
+      .chat-input-container {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        background: white;
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 1px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        transition: var(--transition);
+      }
+
+      .chat-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .send-button {
+        width: 50px;
+        height: 50px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--primary);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .send-button:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      .send-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Empty State */
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 20px;
+        text-align: center;
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      .empty-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--light);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        color: var(--primary);
+        font-size: 30px;
+      }
+
+      .empty-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .empty-text {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      /* Admin Tools */
+      .admin-tools {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        margin: 20px;
+        box-shadow: var(--shadow);
+        animation: fadeInUp 0.6s ease-out 0.8s both;
+      }
+
+      .admin-tools-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .admin-tools-title i {
+        color: var(--primary);
+      }
+
+      .admin-tools-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .admin-tool-button {
+        padding: 12px;
+        border: none;
+        border-radius: var(--radius-sm);
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .admin-tool-button:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .admin-tool-button.delete {
+        background: rgba(214, 48, 49, 0.1);
+        color: var(--error);
+      }
+
+      .admin-tool-button.delete:hover {
+        background: var(--error);
+        color: white;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal {
+        background: white;
+        border-radius: var(--radius);
+        width: 90%;
+        max-width: 400px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow);
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+      }
+
+      .modal-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 20px;
+        color: #666;
+        cursor: pointer;
+      }
+
+      .modal-body {
+        padding: 20px;
+      }
+
+      .modal-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #eee;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        margin-bottom: 15px;
+        transition: var(--transition);
+      }
+
+      .modal-input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+      }
+
+      .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .modal-button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .modal-button.primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .modal-button.primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .modal-button.secondary {
+        background: #eee;
+        color: #666;
+      }
+
+      .modal-button.secondary:hover {
+        background: #ddd;
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #666;
+        text-decoration: none;
+        font-size: 12px;
+        transition: var(--transition);
+      }
+
+      .nav-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .nav-item.active {
+        color: var(--primary);
+      }
+
+      .nav-item:hover {
+        transform: translateY(-3px);
+        color: var(--primary);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        70% {
+          transform: scale(0.9);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      /* Toast notification */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .toast.error {
+        background: var(--error);
+      }
+
+      .toast.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 480px) {
+        .profile-grid {
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        }
+
+        .profile-avatar {
+          width: 50px;
+          height: 50px;
+        }
+
+        .profile-name {
+          font-size: 13px;
+        }
+
+        .chat-container {
+          margin-left: 15px;
+          margin-right: 15px;
+        }
+
+        .admin-tools {
+          margin-left: 15px;
+          margin-right: 15px;
+        }
+
+        .admin-tools-buttons {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .admin-header-title {
+          font-size: 16px;
+        }
+
+        .admin-mode-badge {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+
+        .profile-grid {
+          grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+          gap: 10px;
+        }
+
+        .profile-card {
+          padding: 12px;
+        }
+
+        .profile-avatar {
+          width: 45px;
+          height: 45px;
+        }
+
+        .message-bubble {
+          max-width: 90%;
+          padding: 8px 12px;
+          font-size: 13px;
+        }
+
+        .chat-input {
+          padding: 10px 12px;
+          font-size: 13px;
+        }
+
+        .send-button {
+          width: 45px;
+          height: 45px;
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+      <div class="admin-header-content">
+        <div class="admin-header-title">Admin Chat</div>
+        <div class="admin-mode-badge">
+          <i class="fas fa-shield-alt"></i>
+          <span>Admin Mode</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Profile Selection -->
+    <div class="profile-selection">
+      <h2 class="section-title">
+        <i class="fas fa-user-secret"></i>
+        <span>Select Foreign Profile</span>
+      </h2>
+      <div class="profile-grid" id="profileGrid">
+        <!-- Profiles will be loaded here -->
+      </div>
+    </div>
+
+    <!-- User Selection -->
+    <div class="user-selection">
+      <h2 class="section-title">
+        <i class="fas fa-users"></i>
+        <span>Active Users</span>
+      </h2>
+      <div class="user-list" id="userList">
+        <!-- Users will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer" style="display: none">
+      <div class="chat-header">
+        <img
+          src=""
+          alt="User"
+          class="chat-header-avatar"
+          id="chatHeaderAvatar"
+        />
+        <div class="chat-header-info">
+          <div class="chat-header-name" id="chatHeaderName">Loading...</div>
+          <div class="chat-header-status">
+            <span class="status-dot"></span>
+            <span id="chatHeaderStatus">Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <!-- Messages will be loaded here -->
+      </div>
+      <div class="chat-input-container">
+        <input
+          type="text"
+          class="chat-input"
+          id="messageInput"
+          placeholder="Type your message..."
+        />
+        <button class="send-button" id="sendButton" disabled>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">
+        <i class="fas fa-comments"></i>
+      </div>
+      <h3 class="empty-title">Select a User to Chat</h3>
+      <p class="empty-text">
+        Choose from the active users above to start chatting as the selected
+        foreign profile.
+      </p>
+    </div>
+
+    <!-- Admin Tools -->
+    <div class="admin-tools">
+      <h2 class="admin-tools-title">
+        <i class="fas fa-tools"></i>
+        <span>Admin Tools</span>
+      </h2>
+      <div class="admin-tools-buttons">
+        <button class="admin-tool-button" id="broadcastBtn">
+          <i class="fas fa-bullhorn"></i>
+          <span>Broadcast</span>
+        </button>
+        <button class="admin-tool-button" id="refreshBtn">
+          <i class="fas fa-sync-alt"></i>
+          <span>Refresh</span>
+        </button>
+        <button class="admin-tool-button delete" id="deleteAllBtn">
+          <i class="fas fa-trash"></i>
+          <span>Delete All</span>
+        </button>
+        <button class="admin-tool-button" id="statsBtn">
+          <i class="fas fa-chart-bar"></i>
+          <span>Stats</span>
+        </button>
+      </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+      <a href="earn.html" class="nav-item">
+        <i class="fas fa-coins"></i>
+        <span>Earn</span>
+      </a>
+      <a href="adminchat.html" class="nav-item active">
+        <i class="fas fa-user-shield"></i>
+        <span>Admin</span>
+      </a>
+      <a href="profile.html" class="nav-item">
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toastMessage">Message sent!</span>
+    </div>
+
+    <!-- Modal for Message Edit -->
+    <div class="modal-overlay" id="editModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit Message</h3>
+          <button class="modal-close" id="editModalClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            class="modal-input"
+            id="editMessageInput"
+            placeholder="Edit message text..."
+          />
+        </div>
+        <div class="modal-footer">
+          <button class="modal-button secondary" id="editModalCancel">
+            Cancel
+          </button>
+          <button class="modal-button primary" id="editModalSave">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Broadcast -->
+    <div class="modal-overlay" id="broadcastModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Broadcast Message</h3>
+          <button class="modal-close" id="broadcastModalClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="text"
+            class="modal-input"
+            id="broadcastMessageInput"
+            placeholder="Type broadcast message..."
+          />
+          <select class="modal-input" id="broadcastProfileSelect">
+            <option value="">Select profile to broadcast as</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-button secondary" id="broadcastModalCancel">
+            Cancel
+          </button>
+          <button class="modal-button primary" id="broadcastModalSend">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCgOvIkDCcS3DFrt5f6Y7pYmjCoHIfDF9U",
+        authDomain: "moniebase-b4b4d.firebaseapp.com",
+        projectId: "moniebase-b4b4d",
+        storageBucket: "moniebase-b4b4d.appspot.com",
+        messagingSenderId: "1009678808253",
+        appId: "1:1009678808253:android:ff94e94c52bad2db7973d4",
+        databaseURL: "https://moniebase-b4b4d-default-rtdb.firebaseio.com/",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // DOM elements
+      const profileGrid = document.getElementById("profileGrid");
+      const userList = document.getElementById("userList");
+      const chatContainer = document.getElementById("chatContainer");
+      const emptyState = document.getElementById("emptyState");
+      const chatMessages = document.getElementById("chatMessages");
+      const messageInput = document.getElementById("messageInput");
+      const sendButton = document.getElementById("sendButton");
+      const chatHeaderAvatar = document.getElementById("chatHeaderAvatar");
+      const chatHeaderName = document.getElementById("chatHeaderName");
+      const chatHeaderStatus = document.getElementById("chatHeaderStatus");
+      const broadcastBtn = document.getElementById("broadcastBtn");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const deleteAllBtn = document.getElementById("deleteAllBtn");
+      const statsBtn = document.getElementById("statsBtn");
+      const toast = document.getElementById("toast");
+      const toastMessage = document.getElementById("toastMessage");
+
+      // Modal elements
+      const editModal = document.getElementById("editModal");
+      const editModalClose = document.getElementById("editModalClose");
+      const editModalCancel = document.getElementById("editModalCancel");
+      const editModalSave = document.getElementById("editModalSave");
+      const editMessageInput = document.getElementById("editMessageInput");
+      const broadcastModal = document.getElementById("broadcastModal");
+      const broadcastModalClose = document.getElementById(
+        "broadcastModalClose"
+      );
+      const broadcastModalCancel = document.getElementById(
+        "broadcastModalCancel"
+      );
+      const broadcastModalSend = document.getElementById("broadcastModalSend");
+      const broadcastMessageInput = document.getElementById(
+        "broadcastMessageInput"
+      );
+      const broadcastProfileSelect = document.getElementById(
+        "broadcastProfileSelect"
+      );
+
+      // Current chat state
+      let currentChat = {
+        selectedProfile: null,
+        selectedUserId: null,
+        selectedUserName: null,
+        selectedUserAvatar: null,
+        selectedUserStatus: null,
+        editingMessageId: null,
+      };
+
+      // Foreign profiles data (same as in earn.html)
+      const foreignProfiles = [
+        {
+          id: "user1",
+          name: "Martin Clark",
+          avatar:
+            "https://tse2.mm.bing.net/th/id/OIP.ooXZBEfKiLvo4odowmS-CwHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+        {
+          id: "user2",
+          name: "Betrice Gabilone",
+          avatar:
+            "https://tse4.mm.bing.net/th/id/OIP.5Qh74bEoWHohq2j0LSwxBgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+        {
+          id: "user3",
+          name: "Annastecia Flakes",
+          avatar:
+            "https://tse4.mm.bing.net/th/id/OIP.ThFpfP_-WnBWqRwXIvCrcgHaLH?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+        {
+          id: "user4",
+          name: "Mira Sorvino",
+          avatar:
+            "https://th.bing.com/th/id/R.709a3081b2159c45dd79b21d72207878?rik=hSKr8PFGrFgczA&pid=ImgRaw&r=0",
+          status: "active",
+        },
+        {
+          id: "user5",
+          name: "Luke Amstrong",
+          avatar:
+            "https://tse2.mm.bing.net/th/id/OIP.b13NUiFnJGRv-ucAAxDd4AHaEL?rs=1&pid=ImgDetMain&o=7&rm=3",
+          status: "active",
+        },
+      ];
+
+      // Show toast notification
+      function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = isError ? "toast error show" : "toast show";
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Load foreign profiles
+      function loadForeignProfiles() {
+        profileGrid.innerHTML = "";
+        foreignProfiles.forEach((profile) => {
+          const profileCard = document.createElement("div");
+          profileCard.className = `profile-card ${
+            currentChat.selectedProfile === profile.id ? "active" : ""
+          }`;
+          profileCard.innerHTML = `
+            <img src="${profile.avatar}" alt="${
+            profile.name
+          }" class="profile-avatar" />
+            <div class="profile-name">${profile.name}</div>
+            <div class="profile-status ${
+              profile.status === "active" ? "status-active" : "status-inactive"
+            }">${profile.status === "active" ? "Active" : "Inactive"}</div>
+          `;
+          profileCard.addEventListener("click", () =>
+            selectForeignProfile(profile)
+          );
+          profileGrid.appendChild(profileCard);
+        });
+
+        // Also populate broadcast profile select
+        broadcastProfileSelect.innerHTML =
+          '<option value="">Select profile to broadcast as</option>';
+        foreignProfiles.forEach((profile) => {
+          const option = document.createElement("option");
+          option.value = profile.id;
+          option.textContent = profile.name;
+          broadcastProfileSelect.appendChild(option);
+        });
+      }
+
+      // Select foreign profile
+      function selectForeignProfile(profile) {
+        currentChat.selectedProfile = profile.id;
+        loadForeignProfiles(); // Re-render to show active state
+        showToast(`Now chatting as ${profile.name}`);
+      }
+
+      // Load active users
+      function loadActiveUsers() {
+        database
+          .ref("users")
+          .orderByChild("lastActivity")
+          .limitToLast(50)
+          .once("value")
+          .then((snapshot) => {
+            const users = [];
+            snapshot.forEach((childSnapshot) => {
+              const user = {
+                id: childSnapshot.key,
+                ...childSnapshot.val(),
+              };
+              users.push(user);
+            });
+
+            // Sort by last activity (newest first)
+            users.sort((a, b) => (b.lastActivity || 0) - (a.lastActivity || 0));
+
+            renderUserList(users);
+          })
+          .catch((error) => {
+            console.error("Error loading users:", error);
+            showToast("Error loading users", true);
+          });
+      }
+
+      // Render user list
+      function renderUserList(users) {
+        userList.innerHTML = "";
+
+        if (users.length === 0) {
+          const emptyItem = document.createElement("div");
+          emptyItem.className = "user-item";
+          emptyItem.textContent = "No active users found";
+          userList.appendChild(emptyItem);
+          return;
+        }
+
+        users.forEach((user) => {
+          const userItem = document.createElement("div");
+          userItem.className = `user-item ${
+            currentChat.selectedUserId === user.id ? "active" : ""
+          }`;
+          userItem.innerHTML = `
+            <img src="https://ui-avatars.com/api/?name=${
+              user.fullName || "User"
+            }&background=${encodeURIComponent("#6c5ce7")}&color=fff" alt="${
+            user.fullName || "User"
+          }" class="user-item-avatar" />
+            <div class="user-item-info">
+              <div class="user-item-name">${user.fullName || "User"}</div>
+              <div class="user-item-last-message">${
+                user.username ? `@${user.username}` : ""
+              }</div>
+            </div>
+            <div class="user-item-time">${formatTime(
+              user.lastActivity || Date.now()
+            )}</div>
+          `;
+          userItem.addEventListener("click", () => startChatWithUser(user));
+          userList.appendChild(userItem);
+        });
+      }
+
+      // Format time (timestamp to relative time)
+      function formatTime(timestamp) {
+        const now = Date.now();
+        const diff = now - timestamp;
+        const minutes = Math.floor(diff / 60000);
+
+        if (minutes < 1) return "Just now";
+        if (minutes < 60) return `${minutes}m ago`;
+        if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`;
+        return `${Math.floor(minutes / 1440)}d ago`;
+      }
+
+      // Start chat with user
+      function startChatWithUser(user) {
+        if (!currentChat.selectedProfile) {
+          showToast("Please select a foreign profile first", true);
+          return;
+        }
+
+        currentChat.selectedUserId = user.id;
+        currentChat.selectedUserName = user.fullName || "User";
+        currentChat.selectedUserAvatar = `https://ui-avatars.com/api/?name=${
+          user.fullName || "User"
+        }&background=${encodeURIComponent("#6c5ce7")}&color=fff`;
+        currentChat.selectedUserStatus = "active";
+
+        // Update UI
+        chatHeaderAvatar.src = currentChat.selectedUserAvatar;
+        chatHeaderName.textContent = currentChat.selectedUserName;
+        chatHeaderStatus.textContent = "Active";
+
+        // Show chat container and hide empty state
+        chatContainer.style.display = "flex";
+        emptyState.style.display = "none";
+
+        // Load messages
+        loadMessages();
+
+        // Re-render user list to show active state
+        loadActiveUsers();
+      }
+
+      // Load messages for current chat
+      function loadMessages() {
+        chatMessages.innerHTML = "";
+
+        if (!currentChat.selectedUserId || !currentChat.selectedProfile) {
+          return;
+        }
+
+        // Get messages from Firebase
+        database
+          .ref(
+            `dimplemssg/${currentChat.selectedUserId}_${currentChat.selectedProfile}`
+          )
+          .on("value", (snapshot) => {
+            const messages = snapshot.val();
+            chatMessages.innerHTML = "";
+
+            if (messages) {
+              // Convert messages object to array and sort by timestamp
+              const messagesArray = Object.entries(messages)
+                .map(([id, message]) => ({ id, ...message }))
+                .sort((a, b) => a.timestamp - b.timestamp);
+
+              // Display messages
+              messagesArray.forEach((message) => {
+                addMessageToChat(
+                  message.id,
+                  message.text,
+                  message.sender === "user",
+                  new Date(message.timestamp)
+                );
+              });
+
+              // Scroll to bottom
+              setTimeout(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+              }, 100);
+            }
+          });
+      }
+
+      // Add message to chat UI
+      function addMessageToChat(messageId, text, isIncoming, timestamp) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${
+          isIncoming ? "message-incoming" : "message-outgoing"
+        }`;
+
+        const timeString = timestamp.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        // Only show actions for outgoing messages (admin messages)
+        const actionsHtml = !isIncoming
+          ? `
+          <div class="message-actions">
+            <div class="message-action edit" data-message-id="${messageId}">
+              <i class="fas fa-edit"></i>
+            </div>
+            <div class="message-action delete" data-message-id="${messageId}">
+              <i class="fas fa-trash"></i>
+            </div>
+          </div>
+        `
+          : "";
+
+        messageDiv.innerHTML = `
+          <div class="message-bubble">${text}</div>
+          ${actionsHtml}
+          <div class="message-time">${timeString}</div>
+        `;
+
+        chatMessages.appendChild(messageDiv);
+
+        // Add event listeners for action buttons
+        if (!isIncoming) {
+          messageDiv.querySelector(".edit").addEventListener("click", (e) => {
+            e.stopPropagation();
+            editMessage(messageId, text);
+          });
+
+          messageDiv.querySelector(".delete").addEventListener("click", (e) => {
+            e.stopPropagation();
+            deleteMessage(messageId);
+          });
+        }
+
+        // Scroll to bottom
+        setTimeout(() => {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 100);
+      }
+
+      // Edit message
+      function editMessage(messageId, currentText) {
+        currentChat.editingMessageId = messageId;
+        editMessageInput.value = currentText;
+        editModal.classList.add("active");
+      }
+
+      // Delete message
+      function deleteMessage(messageId) {
+        if (
+          !currentChat.selectedUserId ||
+          !currentChat.selectedProfile ||
+          !confirm("Are you sure you want to delete this message?")
+        ) {
+          return;
+        }
+
+        database
+          .ref(
+            `dimplemssg/${currentChat.selectedUserId}_${currentChat.selectedProfile}/${messageId}`
+          )
+          .remove()
+          .then(() => {
+            showToast("Message deleted");
+          })
+          .catch((error) => {
+            console.error("Error deleting message:", error);
+            showToast("Error deleting message", true);
+          });
+      }
+
+      // Send message
+      function sendMessage() {
+        const messageText = messageInput.value.trim();
+
+        if (
+          messageText === "" ||
+          !currentChat.selectedUserId ||
+          !currentChat.selectedProfile
+        ) {
+          return;
+        }
+
+        // Get selected profile data
+        const profile = foreignProfiles.find(
+          (p) => p.id === currentChat.selectedProfile
+        );
+
+        // Create message object
+        const message = {
+          text: messageText,
+          sender: "admin",
+          timestamp: Date.now(),
+          profileName: profile.name,
+          profileAvatar: profile.avatar,
+        };
+
+        // Save message to Firebase
+        database
+          .ref(
+            `dimplemssg/${currentChat.selectedUserId}_${currentChat.selectedProfile}`
+          )
+          .push(message)
+          .then(() => {
+            // Clear input
+            messageInput.value = "";
+            sendButton.disabled = true;
+          })
+          .catch((error) => {
+            console.error("Error sending message:", error);
+            showToast("Error sending message", true);
+          });
+      }
+
+      // Broadcast message to all users
+      function broadcastMessage() {
+        const messageText = broadcastMessageInput.value.trim();
+        const profileId = broadcastProfileSelect.value;
+
+        if (messageText === "" || profileId === "") {
+          showToast("Please select a profile and enter a message", true);
+          return;
+        }
+
+        // Get profile data
+        const profile = foreignProfiles.find((p) => p.id === profileId);
+
+        // Get all users
+        database
+          .ref("users")
+          .once("value")
+          .then((snapshot) => {
+            const users = [];
+            snapshot.forEach((childSnapshot) => {
+              users.push(childSnapshot.key);
+            });
+
+            // Send message to each user
+            const promises = users.map((userId) => {
+              const message = {
+                text: messageText,
+                sender: "admin",
+                timestamp: Date.now(),
+                profileName: profile.name,
+                profileAvatar: profile.avatar,
+                isBroadcast: true,
+              };
+
+              return database
+                .ref(`dimplemssg/${userId}_${profileId}`)
+                .push(message);
+            });
+
+            return Promise.all(promises);
+          })
+          .then(() => {
+            showToast(`Broadcast sent to all users as ${profile.name}`);
+            broadcastMessageInput.value = "";
+            broadcastModal.classList.remove("active");
+          })
+          .catch((error) => {
+            console.error("Error broadcasting message:", error);
+            showToast("Error broadcasting message", true);
+          });
+      }
+
+      // Delete all messages in current chat
+      function deleteAllMessages() {
+        if (
+          !currentChat.selectedUserId ||
+          !currentChat.selectedProfile ||
+          !confirm(
+            "Are you sure you want to delete ALL messages in this conversation?"
+          )
+        ) {
+          return;
+        }
+
+        database
+          .ref(
+            `dimplemssg/${currentChat.selectedUserId}_${currentChat.selectedProfile}`
+          )
+          .remove()
+          .then(() => {
+            showToast("All messages deleted");
+          })
+          .catch((error) => {
+            console.error("Error deleting messages:", error);
+            showToast("Error deleting messages", true);
+          });
+      }
+
+      // Event listeners
+      messageInput.addEventListener("input", () => {
+        sendButton.disabled = messageInput.value.trim() === "";
+      });
+
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && messageInput.value.trim() !== "") {
+          sendMessage();
+        }
+      });
+
+      sendButton.addEventListener("click", sendMessage);
+
+      broadcastBtn.addEventListener("click", () => {
+        broadcastModal.classList.add("active");
+      });
+
+      refreshBtn.addEventListener("click", () => {
+        loadActiveUsers();
+        showToast("User list refreshed");
+      });
+
+      deleteAllBtn.addEventListener("click", deleteAllMessages);
+
+      statsBtn.addEventListener("click", () => {
+        showToast("Stats feature coming soon");
+      });
+
+      // Modal event listeners
+      editModalClose.addEventListener("click", () => {
+        editModal.classList.remove("active");
+      });
+
+      editModalCancel.addEventListener("click", () => {
+        editModal.classList.remove("active");
+      });
+
+      editModalSave.addEventListener("click", () => {
+        const newText = editMessageInput.value.trim();
+        if (
+          newText &&
+          currentChat.editingMessageId &&
+          currentChat.selectedUserId &&
+          currentChat.selectedProfile
+        ) {
+          database
+            .ref(
+              `dimplemssg/${currentChat.selectedUserId}_${currentChat.selectedProfile}/${currentChat.editingMessageId}/text`
+            )
+            .set(newText)
+            .then(() => {
+              showToast("Message updated");
+              editModal.classList.remove("active");
+            })
+            .catch((error) => {
+              console.error("Error updating message:", error);
+              showToast("Error updating message", true);
+            });
+        }
+      });
+
+      broadcastModalClose.addEventListener("click", () => {
+        broadcastModal.classList.remove("active");
+      });
+
+      broadcastModalCancel.addEventListener("click", () => {
+        broadcastModal.classList.remove("active");
+      });
+
+      broadcastModalSend.addEventListener("click", broadcastMessage);
+
+      // Close modals when clicking outside
+      window.addEventListener("click", (e) => {
+        if (e.target === editModal) {
+          editModal.classList.remove("active");
+        }
+        if (e.target === broadcastModal) {
+          broadcastModal.classList.remove("active");
+        }
+      });
+
+      // Initialize
+      loadForeignProfiles();
+      loadActiveUsers();
+
+      // Prevent dangerous site warnings
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        window.trustedTypes.createPolicy("default", {
+          createHTML: (string) => string,
+          createScriptURL: (string) => string,
+          createScript: (string) => string,
+        });
+      }
+    </script>
+  </body>
+</html>
